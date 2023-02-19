@@ -4,38 +4,203 @@
              x:Class="Sample_Librarian.MainPage">
 
     <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+        <FlexLayout
+            Direction="Row"
+            
+            >
+            <FlexLayout
+                Direction="Column"
+                JustifyContent="Start"
+                FlexLayout.Grow="1">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+                <FlexLayout
+                    x:Name="ImportNav"
+                    HeightRequest="60"
+                    FlexLayout.Basis="60"
+                    Background="#D2EDF3"
+                    Direction="Row"
+                    JustifyContent="Start"
+                    Padding="20, 0, 20, 0"
+                    >
+                    <FlexLayout
+                        Direction="Row"
+                        JustifyContent="Start"
+                        AlignItems="Center"
+                        FlexLayout.Grow="1"
+                        >
+                        <Button
+                        x:Name="SpliceButton"
+                        Text="Splice"
+                        HeightRequest="40"
+                        WidthRequest="170
+                            "></Button>
+                        <Button
+                        x:Name="DownloadsButton"
+                        Text="Downloads"
+                        HeightRequest="40"
+                        WidthRequest="170"
+                            ></Button>
+                        <Button
+                        x:Name="AddImportFolderButton"
+                        Text="+"
+                        HeightRequest="40"
+                        WidthRequest="60"
+                            ></Button>
+                    </FlexLayout>
+                    <FlexLayout
+                        Direction="Row"
+                        JustifyContent="SpaceBetween"
+                        AlignItems="Center"
+                        FlexLayout.Basis="160"
+                        >
+                        <Image
+                        Source="volume_icon.png"
+                        SemanticProperties.Description="Volume"
+                        HeightRequest="40" 
+                        />
+                        <Slider Maximum="100"
+                            HeightRequest="20"
+                            WidthRequest="100"
+                                ></Slider>
+                    </FlexLayout>
+                </FlexLayout>
+                <FlexLayout
+                    x:Name="FileTable"
+                    Direction="Column"
+                    >
+                    <FlexLayout
+                        x:Name="FileTableHeader"
+                        Direction="Row"
+                        AlignItems="Center"
+                        JustifyContent="SpaceAround"
+                        Padding="20, 0, 20, 0"
+                        BackgroundColor="#B0B0B0"
+                        >
+                        <CheckBox 
+                            x:Name="FileTableHeaderCheckBox"
+                            Color="White" 
+                            Margin="0, 0, 58, 0" 
+                                ></CheckBox>
+                        <Label
+                            Text="File Name"
+                            SemanticProperties.HeadingLevel="Level3"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Margin="10, 0"
+                                ></Label>
+                        <Label
+                            Text="Length"
+                            SemanticProperties.HeadingLevel="Level3"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Margin="10, 0"
+                                ></Label>
+                        <Label
+                            Text="Format"
+                            SemanticProperties.HeadingLevel="Level3"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Margin="10, 0"
+                                ></Label>
+                        <Label
+                            Text="Bit-Rate"
+                            SemanticProperties.HeadingLevel="Level3"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Margin="10, 0"
+                                ></Label>
+                        <Label
+                            Text="Size"
+                            SemanticProperties.HeadingLevel="Level3"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Margin="10, 0"
+                                ></Label>
+                    </FlexLayout>
+                </FlexLayout>
 
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
-
-        </VerticalStackLayout>
+            </FlexLayout>
+            <FlexLayout
+                Direction="Column"
+                WidthRequest="480"
+                FlexLayout.Basis="480"
+                JustifyContent="Start"
+                FlexLayout.Grow="1"
+                >
+                <FlexLayout
+                    x:Name="CategoriesHeader"
+                    HeightRequest="60"
+                    FlexLayout.Basis="60"
+                    Background="#ECF7F9"
+                    Direction="Row"
+                    JustifyContent="Start"
+                    Padding="20, 0, 20, 0"
+                    >
+                    <FlexLayout
+                        Direction="Row"
+                        JustifyContent="Start"
+                        AlignItems="Center"
+                        FlexLayout.Grow="1"
+                        >
+                        <Label
+                            Text="Categorize:"
+                            SemanticProperties.HeadingLevel="Level3"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Margin="10, 0"
+                                ></Label>
+                    </FlexLayout>
+                    <FlexLayout
+                        Direction="Row"
+                        JustifyContent="SpaceBetween"
+                        AlignItems="Center"
+                        FlexLayout.Basis="250"
+                        >
+                        <Button
+                        x:Name="ClearButton"
+                        Text="Clear"
+                        HeightRequest="40"
+                        WidthRequest="170"
+                            ></Button>
+                        <Button
+                        x:Name="SettingsButton"
+                        Text="..."
+                        HeightRequest="40"
+                        WidthRequest="60"
+                            ></Button>
+                    </FlexLayout>
+                </FlexLayout>
+                <FlexLayout
+                    x:Name="CategoriesBody"
+                    FlexLayout.Grow="1"
+                    BackgroundColor="#ECF7F9"
+                    Direction="Column"
+                    JustifyContent="End"
+                    Padding="20"
+                    >
+                    <FlexLayout
+                        x:Name="ConfirmButtons"
+                        Direction="Row"
+                        JustifyContent="SpaceBetween"
+                        >
+                        <Button
+                        x:Name="DeleteButton"
+                        Text="Delete"
+                        HeightRequest="60"
+                        WidthRequest="200"
+                            ></Button>
+                        <Button
+                        x:Name="ConfirmButton"
+                        Text="Confirm"
+                        HeightRequest="60"
+                        WidthRequest="200"
+                            ></Button>
+                    </FlexLayout>
+                </FlexLayout>
+            </FlexLayout>
+        </FlexLayout>
     </ScrollView>
 
 </ContentPage>
