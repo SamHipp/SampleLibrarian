@@ -34,12 +34,13 @@ public partial class MainViewModel : BaseViewModel
     [RelayCommand]
     void ChangeText()
     {
-
         try
         {
-            var dataRows = fileDataRowService.GetFileDataRows();
-            if (FileDataRows.Count != 0 ) { FileDataRows.Clear(); };
-            foreach (var dataRow in dataRows ) { FileDataRows.Add( dataRow ); };
+            List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows();
+            if (FileDataRows.Count > 0) { FileDataRows.Clear(); };
+            foreach (var dataRow in dataRows) { FileDataRows.Add(dataRow); };
+            OnPropertyChanged("FileDataRows");
+            OnPropertyChanged();
         }
         catch (Exception ex)
         { 

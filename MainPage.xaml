@@ -84,7 +84,7 @@
                     >
                     <CheckBox
                         x:Name="FileTableHeaderCheckBox"
-                        Margin="0, 0, 58, 0"
+                        Margin="0, 0, 20, 0"
                         ></CheckBox>
                     <Label
                             Text="File Name"
@@ -92,7 +92,7 @@
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
-                            FlexLayout.Grow="1"
+                            FlexLayout.Basis="1000"
                                 ></Label>
                     <Label
                             Text="Length"
@@ -100,6 +100,7 @@
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
+                            WidthRequest="100"
                                 ></Label>
                     <Label
                             Text="Format"
@@ -107,6 +108,7 @@
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
+                            WidthRequest="100"
                                 ></Label>
                     <Label
                             Text="Bit-Rate"
@@ -114,6 +116,7 @@
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
+                            WidthRequest="100"
                                 ></Label>
                     <Label
                             Text="Size"
@@ -121,46 +124,69 @@
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0, 30, 0"
+                            WidthRequest="100"
                                 ></Label>
                 </FlexLayout>
-                <Label
-                Text="FileTableRow1"
+                <!--<Label
+                Text="FileTableRow3"
                 Background="#ECF7F9"
-                HeightRequest="20"
-                />
-                <Label
-                Text="FileTableRow2"
-                Background="#F2F4F4"
-                HeightRequest="20"
-                />
-                <CollectionView
                     FlexLayout.Grow="1"
+                />-->
+                <FlexLayout
+                    BindableLayout.ItemsSource="{Binding FileDataRows}"
+                    Direction="Column"
                     Background="White"
-                    ItemsSource="{Binding FileDataRows}"
+                    FlexLayout.Basis="1420"
                     >
-                    <CollectionView.ItemTemplate>
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="model:FileDataRow">
                             <FlexLayout
+                                FlexLayout.Basis="20"
                                 Direction="Row"
-                                Background="Gray"
                                 JustifyContent="Start"
+                                Wrap="NoWrap"
                                 AlignItems="Center"
+                                Padding="20, 0, 20, 0"
+                                Background="#F2F4F4"
                                 >
+                                <CheckBox
+                                    x:Name="{Binding FileName}"
+                                    Margin="0, 0, 20, 0"
+                                    ></CheckBox>
                                 <Label
-                                    Text="{Binding FileName}"
-                                    Background="#ECF7F9"
-                                    HeightRequest="20"
-                                    />
+                                        Text="{Binding FileName}"
+                                        FontSize="16"
+                                        Margin="10, 0, 0, 0"
+                                        FlexLayout.Basis="1000"
+                                            ></Label>
+                                <Label
+                                        Text="Length"
+                                        FontSize="16"
+                                        Margin="10, 0"
+                                        WidthRequest="100"
+                                            ></Label>
+                                <Label
+                                        Text="{Binding Format}"
+                                        FontSize="16"
+                                        Margin="10, 0"
+                                        WidthRequest="100"
+                                            ></Label>
+                                <Label
+                                        Text="Bit-Rate"
+                                        FontSize="16"
+                                        Margin="10, 0"
+                                        WidthRequest="100"
+                                            ></Label>
+                                <Label
+                                        Text="{Binding Size}"
+                                        FontSize="16"
+                                        Margin="10, 0, 30, 0"
+                                        WidthRequest="100"
+                                            ></Label>
                             </FlexLayout>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    
-                </CollectionView>
-                <Label
-                Text="FileTableBody"
-                Background="White"
-                FlexLayout.Grow="1"
-                />
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
             </FlexLayout>
             <FlexLayout
                 Direction="Column"

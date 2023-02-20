@@ -4,7 +4,7 @@ using Sample_Librarian.Services;
 namespace Sample_Librarian.Services;
     public class FileDataRowService
     {
-        List<FileDataRow> dataRows = new();
+        List<FileDataRow> dataRows = new List<FileDataRow>();
 
     public List<FileDataRow> GetFileDataRows()
     {
@@ -17,6 +17,7 @@ namespace Sample_Librarian.Services;
             var fileInfo = new FileInfo(file);
             fileDataRow.Format = fileInfo.Extension;
             fileDataRow.FileName = Path.GetFileNameWithoutExtension(file);
+            fileDataRow.Size = fileInfo.Length.ToString();
 
             dataRows.Add(fileDataRow);
 
