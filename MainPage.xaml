@@ -1,205 +1,252 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:Sample_Librarian.Model"
+             xmlns:viewmodel="clr-namespace:Sample_Librarian.ViewModel"
+             x:DataType="viewmodel:MainViewModel"
              x:Class="Sample_Librarian.MainPage">
 
     <ScrollView>
         <FlexLayout
             Direction="Row"
-            
+            JustifyContent="SpaceBetween"
             >
             <FlexLayout
                 Direction="Column"
                 JustifyContent="Start"
-                FlexLayout.Grow="1">
-
+                FlexLayout.Grow="1"
+                >
                 <FlexLayout
-                    x:Name="ImportNav"
-                    HeightRequest="60"
+                    x:Name="FileNav"
                     FlexLayout.Basis="60"
-                    Background="#D2EDF3"
                     Direction="Row"
                     JustifyContent="Start"
-                    Padding="20, 0, 20, 0"
+                    Wrap="NoWrap"
+                    AlignItems="Center"
+                    Background="#D2EDF3"
+                    Padding="20, 0"
                     >
                     <FlexLayout
                         Direction="Row"
                         JustifyContent="Start"
                         AlignItems="Center"
+                        FlexLayout.Basis="600"
                         FlexLayout.Grow="1"
                         >
                         <Button
-                        x:Name="SpliceButton"
-                        Text="Splice"
-                        HeightRequest="40"
-                        WidthRequest="170
-                            "></Button>
-                        <Button
-                        x:Name="DownloadsButton"
-                        Text="Downloads"
                         HeightRequest="40"
                         WidthRequest="170"
-                            ></Button>
+                        Text="Splice"
+                        Command="{Binding ChangeTextCommand}"
+                        />
                         <Button
-                        x:Name="AddImportFolderButton"
-                        Text="+"
+                        HeightRequest="40"
+                        WidthRequest="170"
+                        Text="Downloads"
+                        Margin="20, 0"
+                        />
+                        <Button
                         HeightRequest="40"
                         WidthRequest="60"
-                            ></Button>
+                        Text="+"
+                        />
                     </FlexLayout>
                     <FlexLayout
                         Direction="Row"
                         JustifyContent="SpaceBetween"
                         AlignItems="Center"
-                        FlexLayout.Basis="160"
+                        FlexLayout.Basis="220"
+                        Margin="0, 0, 20, 0"
                         >
                         <Image
                         Source="volume_icon.png"
                         SemanticProperties.Description="Volume"
-                        HeightRequest="40" 
+                        HeightRequest="40"
+                        WidthRequest="40"
                         />
                         <Slider Maximum="100"
-                            HeightRequest="20"
+                            HeightRequest="30"
                             WidthRequest="100"
+                            Margin="0, 0, 20, 0"
                                 ></Slider>
                     </FlexLayout>
+                    
                 </FlexLayout>
                 <FlexLayout
-                    x:Name="FileTable"
-                    Direction="Column"
+                    x:Name="FileTableHeader"
+                    FlexLayout.Basis="20"
+                    Direction="Row"
+                    JustifyContent="Start"
+                    Wrap="NoWrap"
+                    AlignItems="Center"
+                    Padding="20, 0, 20, 0"
+                    Background="#B0B0B0"
                     >
-                    <FlexLayout
-                        x:Name="FileTableHeader"
-                        Direction="Row"
-                        AlignItems="Center"
-                        JustifyContent="SpaceAround"
-                        Padding="20, 0, 20, 0"
-                        BackgroundColor="#B0B0B0"
-                        >
-                        <CheckBox 
-                            x:Name="FileTableHeaderCheckBox"
-                            Color="White" 
-                            Margin="0, 0, 58, 0" 
-                                ></CheckBox>
-                        <Label
+                    <CheckBox
+                        x:Name="FileTableHeaderCheckBox"
+                        Margin="0, 0, 58, 0"
+                        ></CheckBox>
+                    <Label
                             Text="File Name"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
+                            FlexLayout.Grow="1"
                                 ></Label>
-                        <Label
+                    <Label
                             Text="Length"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
                                 ></Label>
-                        <Label
+                    <Label
                             Text="Format"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
                                 ></Label>
-                        <Label
+                    <Label
                             Text="Bit-Rate"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
                                 ></Label>
-                        <Label
+                    <Label
                             Text="Size"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
-                            Margin="10, 0"
+                            Margin="10, 0, 30, 0"
                                 ></Label>
-                    </FlexLayout>
                 </FlexLayout>
-
-
-
+                <Label
+                Text="FileTableRow1"
+                Background="#ECF7F9"
+                HeightRequest="20"
+                />
+                <Label
+                Text="FileTableRow2"
+                Background="#F2F4F4"
+                HeightRequest="20"
+                />
+                <CollectionView
+                    FlexLayout.Grow="1"
+                    Background="White"
+                    ItemsSource="{Binding FileDataRows}"
+                    >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:FileDataRow">
+                            <FlexLayout
+                                Direction="Row"
+                                Background="Gray"
+                                JustifyContent="Start"
+                                AlignItems="Center"
+                                >
+                                <Label
+                                    Text="{Binding FileName}"
+                                    Background="#ECF7F9"
+                                    HeightRequest="20"
+                                    />
+                            </FlexLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    
+                </CollectionView>
+                <Label
+                Text="FileTableBody"
+                Background="White"
+                FlexLayout.Grow="1"
+                />
             </FlexLayout>
             <FlexLayout
                 Direction="Column"
-                WidthRequest="480"
-                FlexLayout.Basis="480"
                 JustifyContent="Start"
-                FlexLayout.Grow="1"
+                FlexLayout.Basis="600"
+                Background="#ECF7F9"
                 >
                 <FlexLayout
                     x:Name="CategoriesHeader"
-                    HeightRequest="60"
                     FlexLayout.Basis="60"
-                    Background="#ECF7F9"
                     Direction="Row"
                     JustifyContent="Start"
-                    Padding="20, 0, 20, 0"
+                    Wrap="NoWrap"
+                    AlignItems="Center"
+                    Background="#ECF7F9"
+                    Padding="20, 0"
                     >
-                    <FlexLayout
-                        Direction="Row"
-                        JustifyContent="Start"
-                        AlignItems="Center"
+                    <Label
+                        Text="Categorize:"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        HorizontalTextAlignment="Start"
                         FlexLayout.Grow="1"
-                        >
-                        <Label
-                            Text="Categorize:"
-                            SemanticProperties.HeadingLevel="Level3"
-                            FontSize="16"
-                            FontAttributes="Bold"
-                            Margin="10, 0"
-                                ></Label>
-                    </FlexLayout>
+                        ></Label>
                     <FlexLayout
                         Direction="Row"
                         JustifyContent="SpaceBetween"
                         AlignItems="Center"
-                        FlexLayout.Basis="250"
+                        FlexLayout.Basis="350"
+                        Margin="0, 0, 20, 0"
                         >
                         <Button
-                        x:Name="ClearButton"
-                        Text="Clear"
                         HeightRequest="40"
                         WidthRequest="170"
-                            ></Button>
+                        Text="Clear"
+                        Margin="20, 0"
+                        />
                         <Button
-                        x:Name="SettingsButton"
-                        Text="..."
                         HeightRequest="40"
                         WidthRequest="60"
-                            ></Button>
+                        Text="..."
+                        Margin="0, 0, 20, 0"
+                        Padding="10, 0"
+                        />
                     </FlexLayout>
+
                 </FlexLayout>
+                <Label
+                Text="CategoriesContainer"
+                Background="Red"
+                HeightRequest="130"
+                />
+                <Label
+                Text="CategoriesBody"
+                Background="#ECF7F9"
+                FlexLayout.Grow="1"
+                />
                 <FlexLayout
-                    x:Name="CategoriesBody"
-                    FlexLayout.Grow="1"
-                    BackgroundColor="#ECF7F9"
-                    Direction="Column"
-                    JustifyContent="End"
-                    Padding="20"
-                    >
-                    <FlexLayout
-                        x:Name="ConfirmButtons"
                         Direction="Row"
                         JustifyContent="SpaceBetween"
+                        AlignItems="Center"
+                        FlexLayout.Basis="60"
+                        Margin="0, 0, 20, 20"
+                        Padding="20, 0"
                         >
-                        <Button
-                        x:Name="DeleteButton"
-                        Text="Delete"
+                    <Button
                         HeightRequest="60"
                         WidthRequest="200"
-                            ></Button>
-                        <Button
-                        x:Name="ConfirmButton"
-                        Text="Confirm"
+                        Text="DELETE"
+                        Margin="20, 0"
+                        />
+                    <Button
                         HeightRequest="60"
                         WidthRequest="200"
-                            ></Button>
-                    </FlexLayout>
+                        Text="CONFIRM"
+                        Margin="0, 0, 20, 0"
+                        Padding="10, 0"
+                        />
                 </FlexLayout>
             </FlexLayout>
+
+            <!--<Label
+                Text="Categories"
+                Background="Blue"
+                WidthRequest="600"
+                />-->
         </FlexLayout>
     </ScrollView>
 

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Sample_Librarian.Services;
+using Sample_Librarian.ViewModel;
 
 namespace Sample_Librarian;
 
@@ -14,6 +16,10 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
+
+		builder.Services.AddSingleton<FileDataRowService>();
+		builder.Services.AddSingleton<MainViewModel>();
+		builder.Services.AddSingleton<MainPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();
