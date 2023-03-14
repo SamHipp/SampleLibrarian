@@ -132,13 +132,12 @@
                 Background="#ECF7F9"
                     FlexLayout.Grow="1"
                 />-->
-                <FlexLayout
-                    BindableLayout.ItemsSource="{Binding FileDataRows}"
-                    Direction="Column"
+                <CollectionView
+                    ItemsSource="{Binding FileDataRows}"
                     Background="White"
-                    FlexLayout.Basis="1420"
+                    FlexLayout.Basis="1720"
                     >
-                    <BindableLayout.ItemTemplate>
+                    <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:FileDataRow">
                             <FlexLayout
                                 FlexLayout.Basis="20"
@@ -151,7 +150,7 @@
                                 >
                                 <CheckBox
                                     x:Name="{Binding FileName}"
-                                    Margin="0, 0, 20, 0"
+                                    Margin="10, 0, 20, 0"
                                     ></CheckBox>
                                 <Label
                                         Text="{Binding FileName}"
@@ -185,8 +184,8 @@
                                             ></Label>
                             </FlexLayout>
                         </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </FlexLayout>
             <FlexLayout
                 Direction="Column"
