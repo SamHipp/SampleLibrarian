@@ -135,7 +135,7 @@
                 <CollectionView
                     ItemsSource="{Binding FileDataRows}"
                     Background="White"
-                    FlexLayout.Basis="1720"
+                    FlexLayout.Basis="1833"
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:FileDataRow">
@@ -242,6 +242,7 @@
                 Text="CategoriesBody"
                 Background="#ECF7F9"
                 FlexLayout.Grow="1"
+                FlexLayout.Basis="Auto"
                 />
                 <FlexLayout
                         Direction="Row"
