@@ -37,7 +37,7 @@ public partial class MainViewModel : BaseViewModel
         try
         {
             List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows();
-            if (FileDataRows.Count > 0) { FileDataRows.Clear(); };
+            FileDataRows.Clear();
             foreach (var dataRow in dataRows) { FileDataRows.Add(dataRow); };
             OnPropertyChanged("FileDataRows");
             OnPropertyChanged();

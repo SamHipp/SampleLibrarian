@@ -8,6 +8,7 @@ namespace Sample_Librarian.Services;
 
     public List<FileDataRow> GetFileDataRows()
     {
+        if (dataRows.Count > 0) { dataRows.Clear(); };
         List<FileDataRow> newDataRows = new List<FileDataRow>();
         string filepath = "X:\\Downloads\\test";
         string[] files = Directory.GetFiles(filepath);
