@@ -10,6 +10,8 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using Sample_Librarian.Services;
 using System.Diagnostics;
+using System.Media;
+using Plugin.Maui.Audio;
 
 namespace Sample_Librarian.ViewModel;
 public partial class MainViewModel : BaseViewModel
@@ -54,10 +56,16 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    void PlaySound()
+    void PlaySound(FileDataRow fileDataRow)
     {
+        
+        if (fileDataRow == null) { return; }
         try
         {
+            IAudioManager audioManager = new AudioManager();
+            var player = audioManager.CreatePlayer(fileDataRow.FilePath);
+            player.Play();
+            player.Dispose();
 
         }
         catch (Exception ex)

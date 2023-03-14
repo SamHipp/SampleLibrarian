@@ -150,8 +150,15 @@
                                 >
                                 <CheckBox
                                     x:Name="{Binding FileName}"
-                                    Margin="10, 0, 20, 0"
+                                    Margin="10, 0, 0, 0"
                                     ></CheckBox>
+                                <Button
+                                    HeightRequest="20"
+                                    WidthRequest="20"
+                                    Text=">"
+                                    CommandParameter="{Binding .}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PlaySoundCommand}"
+                                    />
                                 <Label
                                         Text="{Binding FileName}"
                                         FontSize="16"

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Plugin.Maui.Audio;
 using Sample_Librarian.Services;
 using Sample_Librarian.ViewModel;
 
@@ -20,9 +21,10 @@ public static class MauiProgram
 		builder.Services.AddSingleton<FileDataRowService>();
 		builder.Services.AddSingleton<MainViewModel>();
 		builder.Services.AddSingleton<MainPage>();
+		builder.Services.AddSingleton(AudioManager.Current);
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
 		return builder.Build();
