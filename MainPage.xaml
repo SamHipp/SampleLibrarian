@@ -92,7 +92,7 @@
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
-                            FlexLayout.Basis="1000"
+                            FlexLayout.Basis="500"
                                 ></Label>
                     <Label
                             Text="Length"
@@ -157,7 +157,7 @@
                                         Text="{Binding FileName}"
                                         FontSize="16"
                                         Margin="10, 0, 0, 0"
-                                        FlexLayout.Basis="1000"
+                                        FlexLayout.Basis="500"
                                             ></Label>
                                 <Label
                                         Text="Length"
