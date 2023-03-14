@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Plugin.Maui.Audio;
 
 namespace Sample_Librarian.Model
 {
@@ -15,5 +16,7 @@ namespace Sample_Librarian.Model
         public string BitRate { get; set; }
         public string Size { get; set; }
         public string FilePath { get; set; }
+        public bool isPlaying { get; set; }
+        public IAudioPlayer Player { get; set; }
     }
 }

@@ -34,11 +34,11 @@ public partial class MainViewModel : BaseViewModel
 
 
     [RelayCommand]
-    void ChangeText()
+    async Task ChangeText()
     {
         try
         {
-            List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows();
+            List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows();
             FileDataRows.Clear();
             foreach (var dataRow in dataRows) { FileDataRows.Add(dataRow); };
             OnPropertyChanged("FileDataRows");
@@ -47,7 +47,7 @@ public partial class MainViewModel : BaseViewModel
         catch (Exception ex)
         { 
             Debug.WriteLine( ex );
-            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
         finally 
         {
@@ -56,22 +56,28 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    void PlaySound(FileDataRow fileDataRow)
+    async void PlaySound(FileDataRow fileDataRow)
     {
         
         if (fileDataRow == null) { return; }
         try
         {
-            IAudioManager audioManager = new AudioManager();
-            var player = audioManager.CreatePlayer(fileDataRow.FilePath);
-            player.Play();
-            player.Dispose();
+            if (fileDataRow.Player.IsPlaying)
+            {
+                fileDataRow.Player.Stop();
+            }
+            else
+            {
+                fileDataRow.Player.Play();
+            }
+                
+            
 
         }
         catch (Exception ex)
         {
             Debug.WriteLine( ex );
-            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
 }
