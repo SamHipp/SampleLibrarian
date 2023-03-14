@@ -14,5 +14,6 @@ namespace Sample_Librarian.Model
         public string Format { get; set; }
         public string BitRate { get; set; }
         public string Size { get; set; }
+        public string FilePath { get; set; }
     }
 }

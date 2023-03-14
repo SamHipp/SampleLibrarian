@@ -19,6 +19,7 @@ namespace Sample_Librarian.Services;
             fileDataRow.Format = fileInfo.Extension;
             fileDataRow.FileName = Path.GetFileNameWithoutExtension(file);
             fileDataRow.Size = fileInfo.Length.ToString();
+            fileDataRow.FilePath = file;
 
             dataRows.Add(fileDataRow);
 

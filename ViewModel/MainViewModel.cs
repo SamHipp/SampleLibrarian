@@ -52,4 +52,18 @@ public partial class MainViewModel : BaseViewModel
             Debug.WriteLine("Worked");
         }
     }
+
+    [RelayCommand]
+    void PlaySound()
+    {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine( ex );
+            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
 }
