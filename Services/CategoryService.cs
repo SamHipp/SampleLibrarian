@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,23 @@ namespace Sample_Librarian.Services
 
             }
             return categoryGroup;
+        }
+
+        public Category AddCategory(string name, string filePath)
+        {
+            Category category = new Category();
+            try
+            {
+                category.Name = name;
+                category.FilePath = filePath;
+                return category;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+                return null;
+            }
         }
     }
 }
