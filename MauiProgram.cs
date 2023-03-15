@@ -19,6 +19,7 @@ public static class MauiProgram
 			});
 
 		builder.Services.AddSingleton<FileDataRowService>();
+		builder.Services.AddSingleton<CategoryService>();
 		builder.Services.AddSingleton<MainViewModel>();
 		builder.Services.AddSingleton<MainPage>();
 		builder.Services.AddSingleton(AudioManager.Current);

@@ -17,14 +17,16 @@ namespace Sample_Librarian.ViewModel;
 public partial class MainViewModel : BaseViewModel
 {
     FileDataRowService fileDataRowService;
+    CategoryService categoryService;
 
     public ObservableCollection<FileDataRow> FileDataRows { get; set; } = new();
 
+    public ObservableCollection<CategoryGroup> CategoryGroups { get; set; }
 
-
-    public MainViewModel(FileDataRowService fileDataRowService)
+    public MainViewModel(FileDataRowService fileDataRowService, CategoryService categoryService)
     {
         this.fileDataRowService = fileDataRowService;
+        this.categoryService = categoryService;
     }
 
 
@@ -34,7 +36,7 @@ public partial class MainViewModel : BaseViewModel
 
 
     [RelayCommand]
-    async Task ChangeText()
+    async Task GetFiles()
     {
         try
         {
@@ -56,6 +58,25 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    void GetCategoryGroup(string parentFilePath)
+    {
+        try
+        {
+            CategoryGroup categoryGroup = CategoryService.GetCategoryGroup(parentFilePath);
+            if (categoryGroup != null)
+            {
+                CategoryGroups.Add(categoryGroup);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+
+    }
+
+    [RelayCommand]
     async void PlaySound(FileDataRow fileDataRow)
     {
         
@@ -70,9 +91,6 @@ public partial class MainViewModel : BaseViewModel
             {
                 fileDataRow.Player.Play();
             }
-                
-            
-
         }
         catch (Exception ex)
         {

@@ -5,6 +5,19 @@
              xmlns:viewmodel="clr-namespace:Sample_Librarian.ViewModel"
              x:DataType="viewmodel:MainViewModel"
              x:Class="Sample_Librarian.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="categoryTemplate">
+                <Button
+                    HeightRequest="40"
+                    WidthRequest="170"
+                    Text="Get Files"
+                    CommandParameter="{Binding .FilePath}"
+                    Command="{Binding GetCategoryGroupCommand}"
+                    />
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView>
         <FlexLayout
@@ -36,8 +49,8 @@
                         <Button
                         HeightRequest="40"
                         WidthRequest="170"
-                        Text="Splice"
-                        Command="{Binding ChangeTextCommand}"
+                        Text="Get Files"
+                        Command="{Binding GetFilesCommand}"
                         />
                         <Button
                         HeightRequest="40"
@@ -240,6 +253,28 @@
                     </FlexLayout>
 
                 </FlexLayout>
+                <CollectionView
+                    ItemsSource="{Binding CategoryGroups}"
+                    Background="White"
+                    FlexLayout.Basis="1833"
+                    >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:CategoryGroup">
+                            <FlexLayout
+                                Direction="Row"
+                                JustifyContent="Start"
+                                Wrap="Wrap"
+                                HeightRequest="130"
+                                AlignItems="Center"
+                                Padding="10"
+                                Background="#ECF7F9"
+                                BindableLayout.ItemsSource="{Binding Categories}"
+                                >
+                                
+                            </FlexLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 <Label
                 Text="CategoriesContainer"
                 Background="Red"
