@@ -5,24 +5,11 @@
              xmlns:viewmodel="clr-namespace:Sample_Librarian.ViewModel"
              x:DataType="viewmodel:MainViewModel"
              x:Class="Sample_Librarian.MainPage">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <DataTemplate x:Key="categoryTemplate">
-                <Button
-                    HeightRequest="40"
-                    WidthRequest="170"
-                    Text="Get Files"
-                    CommandParameter="{Binding .FilePath}"
-                    Command="{Binding GetCategoryGroupCommand}"
-                    />
-            </DataTemplate>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <ScrollView>
         <FlexLayout
             Direction="Row"
-            JustifyContent="SpaceBetween"
+            JustifyContent="Center"
             >
             <FlexLayout
                 Direction="Column"
@@ -140,11 +127,6 @@
                             WidthRequest="100"
                                 ></Label>
                 </FlexLayout>
-                <!--<Label
-                Text="FileTableRow3"
-                Background="#ECF7F9"
-                    FlexLayout.Grow="1"
-                />-->
                 <CollectionView
                     ItemsSource="{Binding FileDataRows}"
                     Background="White"
@@ -210,7 +192,7 @@
             <FlexLayout
                 Direction="Column"
                 JustifyContent="Start"
-                FlexLayout.Basis="600"
+                FlexLayout.Basis="500"
                 Background="#ECF7F9"
                 >
                 <FlexLayout
@@ -256,7 +238,7 @@
                 <CollectionView
                     ItemsSource="{Binding CategoryGroups}"
                     Background="White"
-                    FlexLayout.Basis="1833"
+                    FlexLayout.Basis="1750"
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:CategoryGroup">
@@ -266,45 +248,46 @@
                                 Wrap="Wrap"
                                 HeightRequest="130"
                                 AlignItems="Center"
-                                Padding="10"
+                                Padding="20"
                                 Background="#ECF7F9"
                                 BindableLayout.ItemsSource="{Binding Categories}"
                                 >
-                                
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            HeightRequest="40"
+                                            WidthRequest="170"
+                                            FontSize="20"
+                                            Text="{Binding Name}"
+                                            CommandParameter="{Binding FilePath}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GetCategoryGroupCommand}"
+                                            />
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+
                             </FlexLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <Label
-                Text="CategoriesContainer"
-                Background="Red"
-                HeightRequest="130"
-                />
-                <Label
-                Text="CategoriesBody"
-                Background="#ECF7F9"
-                FlexLayout.Grow="1"
-                FlexLayout.Basis="Auto"
-                />
                 <FlexLayout
                         Direction="Row"
-                        JustifyContent="SpaceBetween"
+                        JustifyContent="Center"
                         AlignItems="Center"
                         FlexLayout.Basis="60"
-                        Margin="0, 0, 20, 20"
-                        Padding="20, 0"
+                        Margin="0"
+                        Padding="20"
                         >
                     <Button
                         HeightRequest="60"
                         WidthRequest="200"
                         Text="DELETE"
-                        Margin="20, 0"
+                        Margin="10"
                         />
                     <Button
                         HeightRequest="60"
                         WidthRequest="200"
                         Text="CONFIRM"
-                        Margin="0, 0, 20, 0"
+                        Margin="10"
                         Padding="10, 0"
                         />
                 </FlexLayout>

@@ -21,7 +21,7 @@ public partial class MainViewModel : BaseViewModel
 
     public ObservableCollection<FileDataRow> FileDataRows { get; set; } = new();
 
-    public ObservableCollection<CategoryGroup> CategoryGroups { get; set; }
+    public ObservableCollection<CategoryGroup> CategoryGroups { get; set; } = new();
 
     public MainViewModel(FileDataRowService fileDataRowService, CategoryService categoryService)
     {
@@ -45,6 +45,7 @@ public partial class MainViewModel : BaseViewModel
             foreach (var dataRow in dataRows) { FileDataRows.Add(dataRow); };
             OnPropertyChanged("FileDataRows");
             OnPropertyChanged();
+            GetCategoryGroup("");
         }
         catch (Exception ex)
         { 
@@ -58,12 +59,13 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    void GetCategoryGroup(string parentFilePath)
+    public void GetCategoryGroup(string parentFilePath)
     {
         try
         {
+
             CategoryGroup categoryGroup = CategoryService.GetCategoryGroup(parentFilePath);
-            if (categoryGroup != null)
+            if (categoryGroup.Categories.Count > 0)
             {
                 CategoryGroups.Add(categoryGroup);
             }

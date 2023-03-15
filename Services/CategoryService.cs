@@ -15,11 +15,12 @@ namespace Sample_Librarian.Services
         public static CategoryGroup GetCategoryGroup(string parentFilePath)
         {
             CategoryGroup categoryGroup = new CategoryGroup();
+            categoryGroup.Categories = new List<Category>();
             if (parentFilePath.Length == 0) { parentFilePath = @"X:\Downloads\test\TestCategories"; }
             string[] files = Directory.GetDirectories(parentFilePath);
             foreach (string file in files)
             {
-                var category = new Category();
+                Category category = new Category();
                 category.Name = Path.GetFileName(file);
                 category.FilePath = file;
 
