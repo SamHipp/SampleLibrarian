@@ -24,6 +24,8 @@ public partial class MainViewModel : BaseViewModel
 
     public ObservableCollection<CategoryGroup> CategoryGroups { get; set; } = new();
 
+    public string ActiveFilePath = null;
+
     public MainViewModel(FileDataRowService fileDataRowService, CategoryService categoryService)
     {
         this.fileDataRowService = fileDataRowService;
@@ -73,6 +75,29 @@ public partial class MainViewModel : BaseViewModel
                 }
             }
             CategoryGroups.Add(categoryGroup);
+            ActiveFilePath = parentFilePath;
+            if (ActiveFilePath != null && ActiveFilePath.Length > 0) 
+            {
+                for (int i = 0; i < CategoryGroups.Count; i++)
+                {
+                    for (int j = 0; j < CategoryGroups[i].Categories.Count; j++)
+                    {
+                        if (CategoryGroups[i].Categories[j].IsSelected == true)
+                        {
+                            CategoryGroups[i].Categories[j].IsSelected = false;
+                        }
+                        if (CategoryGroups[i].Categories[j].FilePath == parentFilePath)
+                        {
+                            CategoryGroup newCategoryGroup = CategoryGroups[i];
+                            CategoryGroups.Remove(CategoryGroups[i]);
+                            OnPropertyChanged(nameof(CategoryGroups));
+                            CategoryGroups.Insert(i, newCategoryGroup);
+                            CategoryGroups[i].Categories[j].IsSelected = true;
+                            OnPropertyChanged(nameof(CategoryGroups));
+                        }
+                    }
+                }
+            }
             OnPropertyChanged("CategoryGroups");
             OnPropertyChanged();
         }
@@ -195,6 +220,29 @@ public partial class MainViewModel : BaseViewModel
             }
         }
         catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    async Task MoveFiles()
+    {
+        try
+        {
+            List<FileDataRow> files = new List<FileDataRow>();
+            for (int i = 0; i < FileDataRows.Count; i++)
+            {
+                if (FileDataRows[i].IsSelected)
+                {
+                    files.Add(FileDataRows[i]);
+                }
+            }
+            files.ForEach((file) => File.Move(file.FilePath, $"{ActiveFilePath}\\{file.FileName}{file.Format}"));
+            await GetFiles();
+        }
+        catch(Exception ex)
         {
             Debug.WriteLine(ex);
             await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");

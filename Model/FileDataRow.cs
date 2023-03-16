@@ -18,5 +18,6 @@ namespace Sample_Librarian.Model
         public string FilePath { get; set; }
         public bool isPlaying { get; set; }
         public IAudioPlayer Player { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

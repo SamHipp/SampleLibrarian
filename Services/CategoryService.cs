@@ -17,7 +17,7 @@ namespace Sample_Librarian.Services
         {
             CategoryGroup categoryGroup = new CategoryGroup();
             categoryGroup.Categories = new List<Category>();
-            if (parentFilePath.Length == 0) { parentFilePath = @"X:\Downloads\test\TestCategories"; }
+            if (parentFilePath == null || parentFilePath.Length == 0) { parentFilePath = @"X:\Downloads\test\TestCategories"; }
             categoryGroup.Id = parentFilePath.Split('\\').Length;
             categoryGroup.FilePath = parentFilePath;
             string[] files = Directory.GetDirectories(parentFilePath);

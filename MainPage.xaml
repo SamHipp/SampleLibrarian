@@ -146,6 +146,7 @@
                                 <CheckBox
                                     x:Name="{Binding FileName}"
                                     Margin="10, 0, 0, 0"
+                                    IsChecked="{Binding IsSelected}"
                                     ></CheckBox>
                                 <Button
                                     HeightRequest="20"
@@ -263,7 +264,18 @@
                                             Text="{Binding Name}"
                                             CommandParameter="{Binding FilePath}"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GetCategoryGroupCommand}"
-                                            />
+                                            >
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Background" Value="#A7DDE9" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsSelected}" Value="true" TargetType="Button">
+                                                                <Setter Property="Background" Value="#B0B0B0" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>
                                 </FlexLayout>
@@ -330,6 +342,7 @@
                         HeightRequest="60"
                         WidthRequest="200"
                         Text="CONFIRM"
+                        Command="{Binding MoveFilesCommand}"
                         Margin="10"
                         Padding="10, 0"
                         />

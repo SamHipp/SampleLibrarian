@@ -12,20 +12,20 @@ namespace Sample_Librarian.Services;
         if (dataRows.Count > 0) { dataRows.Clear(); };
         string filepath = @"X:\Programming\Projects\0323\Sample-Librarian\Resources\Raw";
         string[] files = Directory.GetFiles(filepath);
-        foreach (string file in files)
+        for (int i = 0; i < files.Length; i++)
         {
             var fileDataRow = new FileDataRow();
-            var fileInfo = new FileInfo(file);
+            var fileInfo = new FileInfo(files[i]);
+            fileDataRow.Id = i;
             fileDataRow.Format = fileInfo.Extension;
-            fileDataRow.FileName = Path.GetFileNameWithoutExtension(file);
+            fileDataRow.FileName = Path.GetFileNameWithoutExtension(files[i]);
             fileDataRow.Size = fileInfo.Length.ToString();
-            fileDataRow.FilePath = file;
+            fileDataRow.FilePath = files[i];
             string fullFileName = $"{fileDataRow.FileName}{fileDataRow.Format}";
             fileDataRow.Player = AudioManager.Current.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(fullFileName));
 
 
             dataRows.Add(fileDataRow);
-
         }
         return dataRows;
     }
