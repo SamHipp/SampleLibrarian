@@ -19,6 +19,7 @@ namespace Sample_Librarian.Services
             categoryGroup.Categories = new List<Category>();
             if (parentFilePath.Length == 0) { parentFilePath = @"X:\Downloads\test\TestCategories"; }
             categoryGroup.Id = parentFilePath.Split('\\').Length;
+            categoryGroup.FilePath = parentFilePath;
             string[] files = Directory.GetDirectories(parentFilePath);
             foreach (string file in files)
             {
@@ -33,7 +34,7 @@ namespace Sample_Librarian.Services
             return categoryGroup;
         }
 
-        public Category AddCategory(CategoryGroup categoryGroup, string name, string filePath)
+        public static Category AddCategory(CategoryGroup categoryGroup, string name, string filePath)
         {
             bool alreadyExists = false;
             try

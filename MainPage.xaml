@@ -14,7 +14,7 @@
             <FlexLayout
                 Direction="Column"
                 JustifyContent="Start"
-                FlexLayout.Grow="1"
+                FlexLayout.Basis="1220"
                 >
                 <FlexLayout
                     x:Name="FileNav"
@@ -192,7 +192,7 @@
             <FlexLayout
                 Direction="Column"
                 JustifyContent="Start"
-                FlexLayout.Basis="500"
+                FlexLayout.Basis="700"
                 Background="#ECF7F9"
                 >
                 <FlexLayout
@@ -242,31 +242,21 @@
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:CategoryGroup">
-                            <FlexLayout
+                            <VerticalStackLayout>
+                                <FlexLayout
                                 Direction="Row"
                                 JustifyContent="Start"
                                 Wrap="Wrap"
                                 HeightRequest="130"
+                                    WidthRequest="692"
                                 AlignItems="Center"
                                 Padding="20"
                                 Background="#ECF7F9"
                                 BindableLayout.ItemsSource="{Binding Categories}"
                                 >
-                                <Button
-                                            HeightRequest="40"
-                                            WidthRequest="170"
-                                            FontSize="20"
-                                            Text="{Binding AddCategoryText}"
-                                            CommandParameter="{Binding .}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=StartAddCategoryCommand}"
-                                            />
-                                <Entry
-                                    IsVisible="{Binding IsAdding}"
-                                    Placeholder="Type..."
-                                    />
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button
                                             HeightRequest="40"
                                             WidthRequest="170"
                                             FontSize="20"
@@ -274,9 +264,51 @@
                                             CommandParameter="{Binding FilePath}"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GetCategoryGroupCommand}"
                                             />
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </FlexLayout>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </FlexLayout>
+                                <Button
+                                            HeightRequest="40"
+                                            WidthRequest="170"
+                                            FontSize="20"
+                                            Text="+"
+                                            CommandParameter="{Binding .}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=StartAddCategoryCommand}"
+                                            />
+                                <Entry
+                                    IsVisible="{Binding IsAdding}"
+                                    Placeholder="Type..."
+                                    TextColor="Black"
+                                    x:Name="AddCategoryEntry"
+                                    ReturnCommandParameter="{Binding Source={x:Reference AddCategoryEntry}, Path=Text}"
+                                    ReturnCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CategoryTextChangedCommand}"
+                                    MaxLength="12"
+                                    />
+                                <FlexLayout
+                                    Direction="Row"
+                                    JustifyContent="Center"
+                                    WidthRequest="692"
+                                    HeightRequest="45"
+                                    IsVisible="{Binding IsAdding}">
+                                    <Button
+                                    HeightRequest="40"
+                                    WidthRequest="170"
+                                    FontSize="20"
+                                    Text="Add"
+                                    CommandParameter="{Binding Source={x:Reference AddCategoryEntry}, Path=Text}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CategoryTextChangedCommand}"
+                                    />
+                                    <Button
+                                    HeightRequest="40"
+                                    WidthRequest="170"
+                                    FontSize="20"
+                                    Text="Cancel"
+                                    CommandParameter="{Binding .}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CancelAddCategoryCommand}"
+                                    />
+                                </FlexLayout>
+                            </VerticalStackLayout>
+                            
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

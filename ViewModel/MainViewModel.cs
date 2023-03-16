@@ -12,6 +12,7 @@ using Sample_Librarian.Services;
 using System.Diagnostics;
 using System.Media;
 using Plugin.Maui.Audio;
+using Microsoft.Maui.Controls;
 
 namespace Sample_Librarian.ViewModel;
 public partial class MainViewModel : BaseViewModel
@@ -43,18 +44,16 @@ public partial class MainViewModel : BaseViewModel
             List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows();
             FileDataRows.Clear();
             foreach (var dataRow in dataRows) { FileDataRows.Add(dataRow); };
-            OnPropertyChanged("FileDataRows");
-            OnPropertyChanged();
+            if (CategoryGroups.Count > 0) { CategoryGroups.Clear(); }
             GetCategoryGroup("");
+            OnPropertyChanged("FileDataRows");
+            OnPropertyChanged("CategoryGroups");
+            OnPropertyChanged();
         }
         catch (Exception ex)
         { 
             Debug.WriteLine( ex );
             await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
-        }
-        finally 
-        {
-            Debug.WriteLine("Worked");
         }
     }
 
@@ -66,10 +65,16 @@ public partial class MainViewModel : BaseViewModel
 
             CategoryGroup categoryGroup = CategoryService.GetCategoryGroup(parentFilePath);
             categoryGroup.AddCategoryText = "+";
-            if (categoryGroup.Categories.Count > 0)
+            for (int i = CategoryGroups.Count - 1; i >= 0; i--)
             {
-                CategoryGroups.Add(categoryGroup);
+                if (CategoryGroups[i].Id >= categoryGroup.Id)
+                {
+                    CategoryGroups.RemoveAt(i);
+                }
             }
+            CategoryGroups.Add(categoryGroup);
+            OnPropertyChanged("CategoryGroups");
+            OnPropertyChanged();
         }
         catch (Exception ex)
         {
@@ -84,6 +89,13 @@ public partial class MainViewModel : BaseViewModel
     {
         try
         {
+            for (int i = 0; i < CategoryGroups.Count; i++)
+            {
+                if (CategoryGroups[i].IsAdding == true)
+                {
+                    CategoryGroups[i].IsAdding = false;
+                }
+            }
             categoryGroup.IsAdding= true;
             categoryGroup.AddCategoryText = "";
             for (int i = 0; i < CategoryGroups.Count; i++)
@@ -91,7 +103,7 @@ public partial class MainViewModel : BaseViewModel
                 if (CategoryGroups[i].Id == categoryGroup.Id)
                 {
                     CategoryGroups.Remove(CategoryGroups[i]);
-                    CategoryGroups.Add(categoryGroup);
+                    CategoryGroups.Insert(i, categoryGroup);
                     return;
                 }
             }
@@ -100,6 +112,92 @@ public partial class MainViewModel : BaseViewModel
         {
             Debug.WriteLine(ex);
             Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    async Task OnCategoryTextChanged(string inputText)
+    {
+        try
+        {
+            for (int i = 0; i < CategoryGroups.Count; i++)
+            {
+                if (CategoryGroups[i].IsAdding == true)
+                {
+                    bool alreadyExists = false;
+                    try
+                    {
+                        CategoryGroups[i].Categories.ForEach(category =>
+                        {
+                            if (category.Name == inputText)
+                            {
+                                alreadyExists = true;
+                            }
+                        });
+                        if (!alreadyExists)
+                        {
+                            Category category = new Category();
+                            CategoryGroup categoryGroup = CategoryService.GetCategoryGroup(CategoryGroups[i].FilePath);
+                            category.Name = inputText;
+                            category.FilePath = CategoryGroups[i].FilePath;
+                            Directory.CreateDirectory($"{category.FilePath}/{inputText}");
+                            categoryGroup.Categories.Add(category);
+                            categoryGroup.IsAdding = false;
+                            CategoryGroups.Remove(CategoryGroups[i]);
+                            OnPropertyChanged("CategoryGroups");
+                            if (categoryGroup != null) { CategoryGroups.Insert(i, categoryGroup); }
+                            OnPropertyChanged("CategoryGroups");
+                        }
+                        else
+                        {
+                            await Shell.Current.DisplayAlert("Error!", $"The {inputText} category already exists!", "OK");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                        await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+                    }
+                        
+                }
+            }
+            OnPropertyChanged("CategoryGroups");
+            OnPropertyChanged();
+                
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    async Task CancelAddCategory(CategoryGroup categoryGroup)
+    {
+        try
+        {
+            for (int i = 0; i < CategoryGroups.Count; i++)
+            {
+                if (CategoryGroups[i].IsAdding == true)
+                {
+                    CategoryGroups[i].IsAdding = false;
+                }
+                CategoryGroups[i].AddCategoryText = "+";
+                if (CategoryGroups[i].Id== categoryGroup.Id)
+                {
+                    CategoryGroups.Remove(CategoryGroups[i]);
+                    OnPropertyChanged("CategoryGroups");
+                    CategoryGroup newCategoryGroup = CategoryService.GetCategoryGroup(categoryGroup.FilePath);
+                    if (newCategoryGroup != null) { CategoryGroups.Insert(i, newCategoryGroup); }
+                    OnPropertyChanged("CategoryGroups");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
 
