@@ -252,6 +252,18 @@
                                 Background="#ECF7F9"
                                 BindableLayout.ItemsSource="{Binding Categories}"
                                 >
+                                <Button
+                                            HeightRequest="40"
+                                            WidthRequest="170"
+                                            FontSize="20"
+                                            Text="{Binding AddCategoryText}"
+                                            CommandParameter="{Binding .}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=StartAddCategoryCommand}"
+                                            />
+                                <Entry
+                                    IsVisible="{Binding IsAdding}"
+                                    Placeholder="Type..."
+                                    />
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
                                         <Button
@@ -264,7 +276,6 @@
                                             />
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
-
                             </FlexLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

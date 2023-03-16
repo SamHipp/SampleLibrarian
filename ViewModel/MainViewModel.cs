@@ -65,6 +65,7 @@ public partial class MainViewModel : BaseViewModel
         {
 
             CategoryGroup categoryGroup = CategoryService.GetCategoryGroup(parentFilePath);
+            categoryGroup.AddCategoryText = "+";
             if (categoryGroup.Categories.Count > 0)
             {
                 CategoryGroups.Add(categoryGroup);
@@ -76,6 +77,30 @@ public partial class MainViewModel : BaseViewModel
             Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
 
+    }
+
+    [RelayCommand]
+    public void StartAddCategory(CategoryGroup categoryGroup)
+    {
+        try
+        {
+            categoryGroup.IsAdding= true;
+            categoryGroup.AddCategoryText = "";
+            for (int i = 0; i < CategoryGroups.Count; i++)
+            {
+                if (CategoryGroups[i].Id == categoryGroup.Id)
+                {
+                    CategoryGroups.Remove(CategoryGroups[i]);
+                    CategoryGroups.Add(categoryGroup);
+                    return;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
     }
 
     [RelayCommand]

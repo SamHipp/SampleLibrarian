@@ -18,6 +18,7 @@ namespace Sample_Librarian.Services
             CategoryGroup categoryGroup = new CategoryGroup();
             categoryGroup.Categories = new List<Category>();
             if (parentFilePath.Length == 0) { parentFilePath = @"X:\Downloads\test\TestCategories"; }
+            categoryGroup.Id = parentFilePath.Split('\\').Length;
             string[] files = Directory.GetDirectories(parentFilePath);
             foreach (string file in files)
             {
@@ -32,14 +33,30 @@ namespace Sample_Librarian.Services
             return categoryGroup;
         }
 
-        public Category AddCategory(string name, string filePath)
+        public Category AddCategory(CategoryGroup categoryGroup, string name, string filePath)
         {
-            Category category = new Category();
+            bool alreadyExists = false;
             try
             {
-                category.Name = name;
-                category.FilePath = filePath;
-                return category;
+                categoryGroup.Categories.ForEach(category =>
+                {
+                    if (category.Name == name)
+                    {
+                        alreadyExists = true;
+                    }
+                });
+                if (!alreadyExists)
+                {
+                    Category category = new Category();
+                    category.Name = name;
+                    category.FilePath = filePath;
+                    Directory.CreateDirectory($"{filePath}\\{name}");
+                    return category;
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
