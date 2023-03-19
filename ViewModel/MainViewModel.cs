@@ -26,6 +26,9 @@ public partial class MainViewModel : BaseViewModel
 
     public string ActiveFilePath = null;
 
+    [ObservableProperty]
+    double volumeLevel = 0;
+
     public MainViewModel(FileDataRowService fileDataRowService, CategoryService categoryService)
     {
         this.fileDataRowService = fileDataRowService;
@@ -290,6 +293,7 @@ public partial class MainViewModel : BaseViewModel
             }
             else
             {
+                fileDataRow.Player.Volume = (VolumeLevel / 100);
                 fileDataRow.Player.Play();
             }
         }

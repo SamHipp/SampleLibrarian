@@ -64,10 +64,12 @@
                         HeightRequest="40"
                         WidthRequest="40"
                         />
-                        <Slider Maximum="100"
-                            HeightRequest="30"
+                        <Slider HeightRequest="30"
                             WidthRequest="100"
                             Margin="0, 0, 20, 0"
+                            Minimum="0"
+                            Maximum="100"
+                            Value="{Binding VolumeLevel}"
                                 ></Slider>
                     </FlexLayout>
                     
