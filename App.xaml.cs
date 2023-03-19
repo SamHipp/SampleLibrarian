@@ -16,7 +16,7 @@ public partial class App : Application
         const int newWidth = 1920;
         window.Width = newWidth;
 
-        const int newHeight = 2000;
+        const int newHeight = 1500;
         window.Height = newHeight;
 
         return window;

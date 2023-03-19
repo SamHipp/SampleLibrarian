@@ -250,6 +250,34 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    async Task DeleteFiles()
+    {
+        try
+        {
+            bool confirmed = await Shell.Current.DisplayAlert("Delete these files?", null, "Yes", "No");
+            if (confirmed)
+            {
+                List<FileDataRow> files = new List<FileDataRow>();
+                for (int i = 0; i < FileDataRows.Count; i++)
+                {
+                    if (FileDataRows[i].IsSelected)
+                    {
+                        files.Add(FileDataRows[i]);
+                    }
+                }
+                files.ForEach((file) => File.Delete(file.FilePath));
+                await GetFiles();
+            }
+            else { return; }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
     async void PlaySound(FileDataRow fileDataRow)
     {
         

@@ -130,7 +130,7 @@
                 <CollectionView
                     ItemsSource="{Binding FileDataRows}"
                     Background="White"
-                    FlexLayout.Basis="1833"
+                    FlexLayout.Basis="1333"
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:FileDataRow">
@@ -239,7 +239,7 @@
                 <CollectionView
                     ItemsSource="{Binding CategoryGroups}"
                     Background="White"
-                    FlexLayout.Basis="1750"
+                    FlexLayout.Basis="1250"
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:CategoryGroup">
@@ -336,6 +336,8 @@
                         HeightRequest="60"
                         WidthRequest="200"
                         Text="DELETE"
+                        Command="{Binding DeleteFilesCommand}"
+                        Background="#DD6666"
                         Margin="10"
                         />
                     <Button
