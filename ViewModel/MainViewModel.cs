@@ -130,7 +130,18 @@ public partial class MainViewModel : BaseViewModel
             Debug.WriteLine(ex);
             Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
+    }
 
+    [RelayCommand]
+    public void ClearCategories()
+    {
+        if (CategoryGroups.Count > 1)
+        {
+            CategoryGroup categoryGroup = CategoryGroups.FirstOrDefault();
+            CategoryGroups.Clear();
+            CategoryGroups.Add(categoryGroup);
+            OnPropertyChanged(nameof(CategoryGroups));
+        }
     }
 
     [RelayCommand]

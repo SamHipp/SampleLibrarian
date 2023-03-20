@@ -229,6 +229,7 @@
                         HeightRequest="40"
                         WidthRequest="170"
                         Text="Clear"
+                        Command="{Binding ClearCategoriesCommand}"
                         Margin="20, 0"
                         />
                         <Button
