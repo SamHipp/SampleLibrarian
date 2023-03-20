@@ -48,7 +48,28 @@ public partial class MainViewModel : BaseViewModel
         {
             List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows();
             FileDataRows.Clear();
-            foreach (var dataRow in dataRows) { FileDataRows.Add(dataRow); };
+            foreach (var dataRow in dataRows) {
+                string seconds = "";
+                string minutes = "";
+                if (dataRow.Player.Duration >= 60)
+                {
+                    seconds = (Convert.ToInt32(dataRow.Player.Duration) % 60).ToString();
+                    minutes = Math.Floor((Convert.ToDecimal(dataRow.Player.Duration) / 60)).ToString();
+                }
+                else { seconds = Math.Floor(Convert.ToDecimal(dataRow.Player.Duration)).ToString(); }
+                if (seconds.Length == 1)
+                {
+                    seconds = $"0{seconds}";
+                }
+                dataRow.Length = $"{minutes}:{seconds}";
+                if (dataRow.Player != null && dataRow.Player.Duration > 0) { dataRow.BitRate = Math.Floor(((Convert.ToDecimal(dataRow.Size) / 1000 * 8) / (Convert.ToDecimal(dataRow.Player.Duration)))).ToString(); }
+                decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
+                if (DRSize > 1000)
+                {
+                    dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
+                } else { dataRow.Size = $"{DRSize} kB"; }
+                FileDataRows.Add(dataRow); 
+            };
             if (CategoryGroups.Count > 0) { CategoryGroups.Clear(); }
             GetCategoryGroup("");
             OnPropertyChanged("FileDataRows");

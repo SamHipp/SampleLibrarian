@@ -24,6 +24,8 @@ namespace Sample_Librarian.Services;
             string fullFileName = $"{fileDataRow.FileName}{fileDataRow.Format}";
             fileDataRow.Player = AudioManager.Current.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(fullFileName));
 
+            
+
 
             dataRows.Add(fileDataRow);
         }

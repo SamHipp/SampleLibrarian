@@ -151,9 +151,12 @@
                                     IsChecked="{Binding IsSelected}"
                                     ></CheckBox>
                                 <Button
-                                    HeightRequest="20"
+                                    HeightRequest="10"
                                     WidthRequest="20"
                                     Text=">"
+                                    Padding="0"
+                                    Margin="0"
+                                    FontSize="10"
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PlaySoundCommand}"
                                     />
@@ -164,7 +167,7 @@
                                         FlexLayout.Basis="500"
                                             ></Label>
                                 <Label
-                                        Text="{Binding Player.Duration}"
+                                        Text="{Binding Length}"
                                         FontSize="16"
                                         Margin="10, 0"
                                         WidthRequest="100"
@@ -176,7 +179,7 @@
                                         WidthRequest="100"
                                             ></Label>
                                 <Label
-                                        Text="Bit-Rate"
+                                        Text="{Binding BitRate}"
                                         FontSize="16"
                                         Margin="10, 0"
                                         WidthRequest="100"
