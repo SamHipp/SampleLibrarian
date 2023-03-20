@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:Sample_Librarian.Model"
+             xmlns:viewmodel="clr-namespace:Sample_Librarian.ViewModel"
+             x:DataType="viewmodel:SettingsViewModel"
+             x:Class="Sample_Librarian.SettingsPage"
+             Title="Settings">
+    <VerticalStackLayout
+        Background="White">
+        <Label 
+            Text="Settings Page coming soon!"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Button
+            Text="Go Back"
+            HeightRequest="60"
+            WidthRequest="170"
+            Command="{Binding NavigateBackCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

@@ -236,6 +236,7 @@
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="..."
+                        Command="{Binding NavigateToSettingsCommand}"
                         Margin="0, 0, 20, 0"
                         Padding="10, 0"
                         />

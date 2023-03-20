@@ -335,4 +335,18 @@ public partial class MainViewModel : BaseViewModel
             await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
+
+    [RelayCommand]
+    async public void NavigateToSettings()
+    {
+        try
+        {
+            await Shell.Current.GoToAsync(nameof(SettingsPage));
+        }
+        catch(Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
 }
