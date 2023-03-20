@@ -29,6 +29,9 @@ public partial class MainViewModel : BaseViewModel
     [ObservableProperty]
     double volumeLevel = 0;
 
+    [ObservableProperty]
+    bool allSelected = false;
+
     public MainViewModel(FileDataRowService fileDataRowService, CategoryService categoryService)
     {
         this.fileDataRowService = fileDataRowService;
@@ -258,6 +261,49 @@ public partial class MainViewModel : BaseViewModel
         {
             Debug.WriteLine(ex);
             await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+    public void OnAllSelectedChanged()
+    {
+        try
+        {
+            if (AllSelected)
+            {
+                Collection<FileDataRow> fileDataRows = new Collection<FileDataRow>();
+                for (int i = 0; i < FileDataRows.Count; i++)
+                {
+                    FileDataRows[i].IsSelected = true;
+                    fileDataRows.Add(FileDataRows[i]);
+                }
+                FileDataRows.Clear();
+                OnPropertyChanged(nameof(FileDataRows));
+                for (int i = 0; i < fileDataRows.Count; i++)
+                {
+                    FileDataRows.Add(fileDataRows[i]);
+                }
+                OnPropertyChanged(nameof(FileDataRows));
+            }
+            else
+            {
+                Collection<FileDataRow> fileDataRows = new Collection<FileDataRow>();
+                for (int i = 0; i < FileDataRows.Count; i++)
+                {
+                    FileDataRows[i].IsSelected = false;
+                    fileDataRows.Add(FileDataRows[i]);
+                }
+                FileDataRows.Clear();
+                OnPropertyChanged(nameof(FileDataRows));
+                for (int i = 0; i < fileDataRows.Count; i++)
+                {
+                    FileDataRows.Add(fileDataRows[i]);
+                }
+                OnPropertyChanged(nameof(FileDataRows));
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
 

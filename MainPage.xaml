@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:model="clr-namespace:Sample_Librarian.Model"
              xmlns:viewmodel="clr-namespace:Sample_Librarian.ViewModel"
              x:DataType="viewmodel:MainViewModel"
@@ -87,7 +88,10 @@
                     <CheckBox
                         x:Name="FileTableHeaderCheckBox"
                         Margin="0, 0, 20, 0"
-                        ></CheckBox>
+                        IsChecked="{Binding AllSelected}"
+                        CheckedChanged="OnSelectAllChanged"
+                        >
+                    </CheckBox>
                     <Label
                             Text="File Name"
                             SemanticProperties.HeadingLevel="Level3"
