@@ -45,11 +45,12 @@ public partial class MainViewModel : BaseViewModel
 
 
     [RelayCommand]
-    async Task GetFiles()
+    async Task GetFiles(string filePath)
     {
         try
         {
-            List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows();
+            if (filePath == null || filePath.Length == 0) { filePath = @"X:\Programming\Projects\0323\Sample-Librarian\Resources\Raw"; }
+            List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows(filePath);
             FileDataRows.Clear();
             foreach (var dataRow in dataRows) {
                 string seconds = "";
@@ -321,7 +322,7 @@ public partial class MainViewModel : BaseViewModel
                 }
             }
             files.ForEach((file) => File.Move(file.FilePath, $"{ActiveFilePath}\\{file.FileName}{file.Format}"));
-            await GetFiles();
+            await GetFiles("");
         }
         catch(Exception ex)
         {
@@ -347,7 +348,7 @@ public partial class MainViewModel : BaseViewModel
                     }
                 }
                 files.ForEach((file) => File.Delete(file.FilePath));
-                await GetFiles();
+                await GetFiles("");
             }
             else { return; }
         }

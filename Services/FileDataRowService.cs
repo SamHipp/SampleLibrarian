@@ -7,11 +7,10 @@ namespace Sample_Librarian.Services;
     {
         List<FileDataRow> dataRows = new List<FileDataRow>();
 
-    public async Task<List<FileDataRow>> GetFileDataRows()
+    public async Task<List<FileDataRow>> GetFileDataRows(string filePath)
     {
         if (dataRows.Count > 0) { dataRows.Clear(); };
-        string filepath = @"X:\Programming\Projects\0323\Sample-Librarian\Resources\Raw";
-        string[] files = Directory.GetFiles(filepath);
+        string[] files = Directory.GetFiles(filePath);
         for (int i = 0; i < files.Length; i++)
         {
             var fileDataRow = new FileDataRow();
