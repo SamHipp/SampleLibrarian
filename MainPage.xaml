@@ -31,33 +31,54 @@
                         Direction="Row"
                         JustifyContent="Start"
                         AlignItems="Center"
-                        FlexLayout.Basis="600"
+                        FlexLayout.Basis="550"
                         FlexLayout.Grow="1"
+                        BindableLayout.ItemsSource="{Binding SourceFolders}"
                         >
-                        <Button
-                        HeightRequest="40"
-                        WidthRequest="170"
-                        Text="Get Files"
-                        Command="{Binding GetFilesCommand}"
-                        />
-                        <Button
-                        HeightRequest="40"
-                        WidthRequest="170"
-                        Text="Downloads"
-                        Margin="20, 0"
-                        />
-                        <Button
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="model:SourceFolder">
+                                <Button
+                                    HeightRequest="40"
+                                    WidthRequest="170"
+                                    FontSize="20"
+                                    Text="{Binding Name}"
+                                    CommandParameter="{Binding FilePath}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GetFilesCommand}"
+                                    >
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#A7DDE9" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected}" Value="true" TargetType="Button">
+                                                    <Setter Property="Background" Value="#B0B0B0" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                    <Button
+                        IsVisible="{Binding IsSourceFoldersNotFull}"
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="+"
+                        Command="{Binding AddSourceFolderCommand}"
                         />
-                    </FlexLayout>
+                    <Button
+                        IsVisible="{Binding IsSourceFolderPresent}"
+                        HeightRequest="40"
+                        WidthRequest="60"
+                        Text="-"
+                        Background="#DD6666"
+                        />
                     <FlexLayout
                         Direction="Row"
                         JustifyContent="SpaceBetween"
                         AlignItems="Center"
-                        FlexLayout.Basis="220"
-                        Margin="0, 0, 20, 0"
+                        FlexLayout.Basis="230"
+                        Margin="20, 0, 20, 0"
                         >
                         <Image
                         Source="volume_icon.png"

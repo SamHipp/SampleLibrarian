@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
+using Microsoft.Extensions.Logging;
 using Plugin.Maui.Audio;
 using Sample_Librarian.Services;
 using Sample_Librarian.ViewModel;
@@ -12,6 +14,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+			.UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -25,6 +28,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton(AudioManager.Current);
         builder.Services.AddSingleton<SettingsViewModel>();
         builder.Services.AddSingleton<SettingsPage>();
+		builder.Services.AddSingleton<SourceFolderService>();
+		builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
 
 #if DEBUG
         builder.Logging.AddDebug();
