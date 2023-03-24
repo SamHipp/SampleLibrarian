@@ -61,18 +61,10 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                     <Button
-                        IsVisible="{Binding IsSourceFoldersNotFull}"
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="+"
                         Command="{Binding AddSourceFolderCommand}"
-                        />
-                    <Button
-                        IsVisible="{Binding IsSourceFolderPresent}"
-                        HeightRequest="40"
-                        WidthRequest="60"
-                        Text="-"
-                        Background="#DD6666"
                         />
                     <FlexLayout
                         Direction="Row"

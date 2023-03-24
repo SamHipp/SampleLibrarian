@@ -39,21 +39,11 @@ namespace Sample_Librarian.Services;
                 fileDataRow.FilePath = files[i];
                 if (fileDataRow.Format == ".wav" || fileDataRow.Format == ".mp3")
                 {
-                    string fullFileName = $"{fileDataRow.FileName}{fileDataRow.Format}";
-                    string copiedFilePath = $"{localFilePathDirectory}\\{fullFileName}";
-                    await Task.Run(() => { File.Copy(files[i], copiedFilePath); });
-                    fileDataRow.LocalFilePath = copiedFilePath;
+                    Stream stream = new FileStream(fileDataRow.FilePath, FileMode.Open, FileAccess.Read);
+                    fileDataRow.Player = AudioManager.Current.CreatePlayer(stream);
+                    fileDataRow.HasPlayer = true;
                 }
                 dataRows.Add(fileDataRow);
-            }
-            for (int j = 0; j < dataRows.Count; j++)
-            {
-                if (dataRows[j].Format == ".wav" || dataRows[j].Format == ".mp3")
-                {
-                    dataRows[j].Player = AudioManager.Current.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(dataRows[j].LocalFilePath));
-                    dataRows[j].HasPlayer = true;
-                }
-                else { dataRows[j].HasPlayer = false; }
             }
             return dataRows;
         }
