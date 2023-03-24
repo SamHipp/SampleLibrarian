@@ -8,31 +8,24 @@
              x:Class="Sample_Librarian.MainPage">
 
     <ScrollView>
-        <FlexLayout
-            Direction="Row"
-            JustifyContent="Center"
+        <HorizontalStackLayout
             >
-            <FlexLayout
-                Direction="Column"
-                JustifyContent="Start"
-                FlexLayout.Basis="1220"
+            <VerticalStackLayout
+                WidthRequest="1220"
+                Spacing="0"
                 >
-                <FlexLayout
+                <HorizontalStackLayout
                     x:Name="FileNav"
-                    FlexLayout.Basis="60"
-                    Direction="Row"
-                    JustifyContent="Start"
-                    Wrap="NoWrap"
-                    AlignItems="Center"
+                    HeightRequest="60"
                     Background="#D2EDF3"
                     Padding="20, 0"
+                    Spacing="0"
                     >
                     <CollectionView
                     IsVisible="{Binding IsSourceFolderPresent}"
                     ItemsSource="{Binding SourceFolders}"
                     Background="#D2EDF3"
-                    FlexLayout.Basis="550"
-                    FlexLayout.Grow="1"
+                    WidthRequest="860"
                     FlowDirection="LeftToRight"
                     ItemsLayout="HorizontalList"
                     >
@@ -61,15 +54,21 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                     <Button
+                        IsVisible="{Binding IsSourceFolderPresent}"
+                        HeightRequest="40"
+                        WidthRequest="60"
+                        Text="-"
+                        Background="#DD6666"
+                        />
+                    <Button
+                        IsVisible="{Binding IsSourceFoldersNotFull}"
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="+"
                         Command="{Binding AddSourceFolderCommand}"
                         />
-                    <FlexLayout
-                        Direction="Row"
-                        JustifyContent="SpaceBetween"
-                        AlignItems="Center"
+                    <HorizontalStackLayout
+                        Spacing="20"
                         FlexLayout.Basis="230"
                         Margin="20, 0, 20, 0"
                         >
@@ -86,22 +85,20 @@
                             Maximum="100"
                             Value="{Binding VolumeLevel}"
                                 ></Slider>
-                    </FlexLayout>
+                    </HorizontalStackLayout>
                     
-                </FlexLayout>
-                <FlexLayout
+                </HorizontalStackLayout>
+                <HorizontalStackLayout
                     x:Name="FileTableHeader"
-                    FlexLayout.Basis="20"
-                    Direction="Row"
-                    JustifyContent="Start"
-                    Wrap="NoWrap"
-                    AlignItems="Center"
+                    HeightRequest="20"
+                    Spacing="20"
                     Padding="20, 0, 20, 0"
                     Background="#B0B0B0"
                     >
                     <CheckBox
                         x:Name="FileTableHeaderCheckBox"
                         Margin="0, 0, 20, 0"
+                        WidthRequest="20"
                         IsChecked="{Binding AllSelected}"
                         CheckedChanged="OnSelectAllChanged"
                         >
@@ -112,6 +109,7 @@
                             FontSize="16"
                             FontAttributes="Bold"
                             Margin="10, 0"
+                            WidthRequest="470"
                             FlexLayout.Basis="500"
                                 ></Label>
                     <Label
@@ -146,22 +144,21 @@
                             Margin="10, 0, 30, 0"
                             WidthRequest="100"
                                 ></Label>
-                </FlexLayout>
+                </HorizontalStackLayout>
                 <CollectionView
                     ItemsSource="{Binding FileDataRows}"
                     Background="White"
+                    HeightRequest="1333"
                     FlexLayout.Basis="1333"
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:FileDataRow">
-                            <FlexLayout
+                            <HorizontalStackLayout
+                                HeightRequest="20"
                                 FlexLayout.Basis="20"
-                                Direction="Row"
-                                JustifyContent="Start"
-                                Wrap="NoWrap"
-                                AlignItems="Center"
-                                Padding="20, 0, 20, 0"
+                                Padding="10, 0, 20, 0"
                                 Background="#F2F4F4"
+                                Spacing="0"
                                 >
                                 <CheckBox
                                     x:Name="{Binding FileName}"
@@ -170,11 +167,11 @@
                                     ></CheckBox>
                                 <Button
                                     IsVisible="{Binding HasPlayer}"
-                                    HeightRequest="10"
-                                    WidthRequest="20"
+                                    HeightRequest="20"
+                                    WidthRequest="40"
                                     Text=">"
                                     Padding="0"
-                                    Margin="0"
+                                    Margin="0, 0, 5, 0"
                                     FontSize="10"
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PlaySoundCommand}"
@@ -183,19 +180,20 @@
                                         Text="{Binding FileName}"
                                         FontSize="16"
                                         Margin="10, 0, 0, 0"
+                                        WidthRequest="500"
                                         FlexLayout.Basis="500"
                                             ></Label>
                                 <Label
                                         Text="{Binding Length}"
                                         FontSize="16"
                                         Margin="10, 0"
-                                        WidthRequest="100"
+                                        WidthRequest="120"
                                             ></Label>
                                 <Label
                                         Text="{Binding Format}"
                                         FontSize="16"
                                         Margin="10, 0"
-                                        WidthRequest="100"
+                                        WidthRequest="120"
                                             ></Label>
                                 <Label
                                         Text="{Binding BitRate}"
@@ -209,26 +207,21 @@
                                         Margin="10, 0, 30, 0"
                                         WidthRequest="100"
                                             ></Label>
-                            </FlexLayout>
+                            </HorizontalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </FlexLayout>
-            <FlexLayout
-                Direction="Column"
-                JustifyContent="Start"
-                FlexLayout.Basis="700"
+            </VerticalStackLayout>
+            <VerticalStackLayout
+                WidthRequest="700"
                 Background="#ECF7F9"
                 >
-                <FlexLayout
+                <HorizontalStackLayout
                     x:Name="CategoriesHeader"
-                    FlexLayout.Basis="60"
-                    Direction="Row"
-                    JustifyContent="Start"
-                    Wrap="NoWrap"
-                    AlignItems="Center"
+                    HeightRequest="60"
                     Background="#ECF7F9"
                     Padding="20, 0"
+                    Spacing="170"
                     >
                     <Label
                         Text="Categorize:"
@@ -236,11 +229,10 @@
                         FontAttributes="Bold"
                         HorizontalTextAlignment="Start"
                         FlexLayout.Grow="1"
+                        WidthRequest="200"
                         ></Label>
-                    <FlexLayout
-                        Direction="Row"
-                        JustifyContent="SpaceBetween"
-                        AlignItems="Center"
+                    <HorizontalStackLayout
+                        WidthRequest="350"
                         FlexLayout.Basis="350"
                         Margin="0, 0, 20, 0"
                         >
@@ -259,31 +251,31 @@
                         Margin="0, 0, 20, 0"
                         Padding="10, 0"
                         />
-                    </FlexLayout>
+                    </HorizontalStackLayout>
 
-                </FlexLayout>
+                </HorizontalStackLayout>
                 <CollectionView
                     ItemsSource="{Binding CategoryGroups}"
                     Background="White"
-                    FlexLayout.Basis="1250"
+                    HeightRequest="1250"
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:CategoryGroup">
                             <VerticalStackLayout>
-                                <FlexLayout
-                                Direction="Row"
-                                JustifyContent="Start"
-                                Wrap="Wrap"
+                                <Grid
+                                RowDefinitions="40, 40, 40"
+                                ColumnDefinitions="170, 170, 170, 170"
                                 HeightRequest="130"
-                                    WidthRequest="692"
-                                AlignItems="Center"
-                                Padding="20"
+                                WidthRequest="692"
                                 Background="#ECF7F9"
                                 BindableLayout.ItemsSource="{Binding Categories}"
                                 >
                                     <BindableLayout.ItemTemplate>
                                         <DataTemplate>
                                             <Button
+                                            x:DataType="model:Category"
+                                            Grid.Row="{Binding RowNumber}"
+                                            Grid.Column="{Binding ColumnNumber}"
                                             HeightRequest="40"
                                             WidthRequest="170"
                                             FontSize="20"
@@ -304,15 +296,15 @@
                                             </Button>
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>
-                                </FlexLayout>
+                                </Grid>
                                 <Button
-                                            HeightRequest="40"
-                                            WidthRequest="170"
-                                            FontSize="20"
-                                            Text="+"
-                                            CommandParameter="{Binding .}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=StartAddCategoryCommand}"
-                                            />
+                                    HeightRequest="40"
+                                    WidthRequest="170"
+                                    FontSize="20"
+                                    Text="+"
+                                    CommandParameter="{Binding .}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=StartAddCategoryCommand}"
+                                    />
                                 <Entry
                                     IsVisible="{Binding IsAdding}"
                                     Placeholder="Type..."
@@ -322,11 +314,11 @@
                                     ReturnCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CategoryTextChangedCommand}"
                                     MaxLength="12"
                                     />
-                                <FlexLayout
-                                    Direction="Row"
-                                    JustifyContent="Center"
+                                <HorizontalStackLayout
                                     WidthRequest="692"
                                     HeightRequest="45"
+                                    Spacing="60"
+                                    Padding="140, 0, 20, 0"
                                     IsVisible="{Binding IsAdding}">
                                     <Button
                                     HeightRequest="40"
@@ -344,19 +336,17 @@
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CancelAddCategoryCommand}"
                                     />
-                                </FlexLayout>
+                                </HorizontalStackLayout>
                             </VerticalStackLayout>
                             
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <FlexLayout
-                        Direction="Row"
-                        JustifyContent="Center"
-                        AlignItems="Center"
-                        FlexLayout.Basis="60"
-                        Margin="0"
-                        Padding="20"
+                <HorizontalStackLayout
+                        HeightRequest="60"
+                        Margin="0, 20, 0, 0"
+                        Spacing="50"
+                        Padding="100, 0, 20, 0"
                         >
                     <Button
                         HeightRequest="60"
@@ -365,6 +355,7 @@
                         Command="{Binding DeleteFilesCommand}"
                         Background="#DD6666"
                         Margin="10"
+                        VerticalOptions="Center"
                         />
                     <Button
                         HeightRequest="60"
@@ -373,16 +364,17 @@
                         Command="{Binding MoveFilesCommand}"
                         Margin="10"
                         Padding="10, 0"
+                        VerticalOptions="Center"
                         />
-                </FlexLayout>
-            </FlexLayout>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
 
             <!--<Label
                 Text="Categories"
                 Background="Blue"
                 WidthRequest="600"
                 />-->
-        </FlexLayout>
+        </HorizontalStackLayout>
     </ScrollView>
 
 </ContentPage>

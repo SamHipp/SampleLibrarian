@@ -33,7 +33,7 @@ public partial class MainViewModel : BaseViewModel
     public string ActiveCatgoryFilePath = null;
 
     [ObservableProperty]
-    double volumeLevel = 0;
+    double volumeLevel = 100;
 
     [ObservableProperty]
     bool allSelected = false;
@@ -95,8 +95,9 @@ public partial class MainViewModel : BaseViewModel
         try
         {
             if (filePath == null || filePath.Length == 0) { filePath = @"X:\Programming\Projects\0323\Sample-Librarian\Resources\Raw"; }
-            List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows(filePath);
             FileDataRows.Clear();
+            OnPropertyChanged("FileDataRows");
+            List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows(filePath);
             foreach (var dataRow in dataRows) {
                 if (dataRow.HasPlayer == true)
                 {
@@ -254,6 +255,8 @@ public partial class MainViewModel : BaseViewModel
                             CategoryGroup categoryGroup = CategoryService.GetCategoryGroup(CategoryGroups[i].FilePath);
                             category.Name = inputText;
                             category.FilePath = CategoryGroups[i].FilePath;
+                            category.ColumnNumber = CategoryGroups[i].Categories.Count % 4;
+                            category.RowNumber = Convert.ToInt32(Math.Floor(Convert.ToDecimal(CategoryGroups[i].Categories.Count) / 4));
                             Directory.CreateDirectory($"{category.FilePath}/{inputText}");
                             categoryGroup.Categories.Add(category);
                             categoryGroup.IsAdding = false;

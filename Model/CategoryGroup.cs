@@ -16,5 +16,6 @@ namespace Sample_Librarian.Model
         public List<Category> Categories { get; set;}
         public bool IsAdding { get; set; }
         public string AddCategoryText { get; set; }
+        public int RowsHeight { get; set; }
     }
 }

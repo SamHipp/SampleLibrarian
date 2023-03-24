@@ -12,5 +12,7 @@ namespace Sample_Librarian.Model
         public string Name { get; set; }
         public string FilePath { get; set; }
         public bool IsSelected { get; set; }
+        public int RowNumber { get; set; }
+        public int ColumnNumber { get; set; }
     }
 }

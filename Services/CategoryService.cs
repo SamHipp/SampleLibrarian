@@ -21,15 +21,14 @@ namespace Sample_Librarian.Services
             categoryGroup.Id = parentFilePath.Split('\\').Length;
             categoryGroup.FilePath = parentFilePath;
             string[] files = Directory.GetDirectories(parentFilePath);
-            foreach (string file in files)
+            for (int i = 0; i < files.Length; i++)
             {
                 Category category = new Category();
-                category.Name = Path.GetFileName(file);
-                category.FilePath = file;
-
-
+                category.Name = Path.GetFileName(files[i]);
+                category.FilePath = files[i];
+                category.ColumnNumber = i % 4;
+                category.RowNumber = Convert.ToInt32(Math.Floor(Convert.ToDecimal(i) / 4));
                 categoryGroup.Categories.Add(category);
-
             }
             return categoryGroup;
         }
@@ -51,6 +50,8 @@ namespace Sample_Librarian.Services
                     Category category = new Category();
                     category.Name = name;
                     category.FilePath = filePath;
+                    category.ColumnNumber = categoryGroup.Categories.Count % 4;
+                    category.RowNumber = Convert.ToInt32(Math.Floor(Convert.ToDecimal(categoryGroup.Categories.Count) / 4));
                     Directory.CreateDirectory($"{filePath}\\{name}");
                     return category;
                 }
