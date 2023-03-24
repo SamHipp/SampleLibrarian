@@ -68,26 +68,18 @@ public partial class MainViewModel : BaseViewModel
                     SourceFolders[i].IsSelected = false;
                 }
             }
-            if (SourceFolders.Count > 2)
+            if (SourceFolders.Count > 3)
             {
                 IsSourceFoldersNotFull = false;
-                OnPropertyChanged("IsSourceFoldersNotFull");
             }
-            SourceFolders.Add(sourceFolder);
-            OnPropertyChanged("SourceFolders");
-            SourceFolders.Remove(sourceFolder);
-            OnPropertyChanged("SourceFolders");
-            SourceFolders.Add(sourceFolder);
-            OnPropertyChanged("SourceFolders");
-            CurrentSourceFolderPath = sourceFolder.FilePath;
-            OnPropertyChanged("CurrentSourceFolderPath");
-            IsSourceFolderPresent = true;
-            OnPropertyChanged("IsSourceFolderPresent");
-            IsSourceFolderPresent = false;
-            OnPropertyChanged("IsSourceFolderPresent");
-            IsSourceFolderPresent = true;
-            OnPropertyChanged("IsSourceFolderPresent");
-            await GetFiles(sourceFolder.FilePath);
+                SourceFolders.Add(sourceFolder);
+                CurrentSourceFolderPath = sourceFolder.FilePath;
+                IsSourceFolderPresent = true;
+                await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
+                await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
+                await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
+                
+                await GetFiles(sourceFolder.FilePath);
         }
         catch (Exception ex)
         {
@@ -106,25 +98,30 @@ public partial class MainViewModel : BaseViewModel
             List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows(filePath);
             FileDataRows.Clear();
             foreach (var dataRow in dataRows) {
-                string seconds = "";
-                string minutes = "";
-                if (dataRow.Player.Duration >= 60)
+                if (dataRow.HasPlayer == true)
                 {
-                    seconds = (Convert.ToInt32(dataRow.Player.Duration) % 60).ToString();
-                    minutes = Math.Floor((Convert.ToDecimal(dataRow.Player.Duration) / 60)).ToString();
+                    string seconds = "";
+                    string minutes = "";
+                    if (dataRow.Player.Duration >= 60)
+                    {
+                        seconds = (Convert.ToInt32(dataRow.Player.Duration) % 60).ToString();
+                        minutes = Math.Floor((Convert.ToDecimal(dataRow.Player.Duration) / 60)).ToString();
+                    }
+                    else { seconds = Math.Floor(Convert.ToDecimal(dataRow.Player.Duration)).ToString(); }
+                    if (seconds.Length == 1)
+                    {
+                        seconds = $"0{seconds}";
+                    }
+                    dataRow.Length = $"{minutes}:{seconds}";
+                    if (dataRow.Player != null && dataRow.Player.Duration > 0) { dataRow.BitRate = Math.Floor(((Convert.ToDecimal(dataRow.Size) / 1000 * 8) / (Convert.ToDecimal(dataRow.Player.Duration)))).ToString(); }
+                    decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
+                    if (DRSize > 1000)
+                    {
+                        dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
+                    }
+                    else { dataRow.Size = $"{DRSize} kB"; }
                 }
-                else { seconds = Math.Floor(Convert.ToDecimal(dataRow.Player.Duration)).ToString(); }
-                if (seconds.Length == 1)
-                {
-                    seconds = $"0{seconds}";
-                }
-                dataRow.Length = $"{minutes}:{seconds}";
-                if (dataRow.Player != null && dataRow.Player.Duration > 0) { dataRow.BitRate = Math.Floor(((Convert.ToDecimal(dataRow.Size) / 1000 * 8) / (Convert.ToDecimal(dataRow.Player.Duration)))).ToString(); }
-                decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
-                if (DRSize > 1000)
-                {
-                    dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
-                } else { dataRow.Size = $"{DRSize} kB"; }
+                
                 FileDataRows.Add(dataRow); 
             };
             if (CategoryGroups.Count > 0) { CategoryGroups.Clear(); }
