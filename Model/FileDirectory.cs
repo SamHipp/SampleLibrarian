@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQLite;
 
 namespace Sample_Librarian.Model
 {
-    public class Category
+    public class FileDirectory
     {
-        public int Id { get; set; }
+        [PrimaryKey, AutoIncrement]
         public int Pk { get; set; }
         public string Name { get; set; }
-        public string FilePath { get; set; }
-        public bool IsSelected { get; set; }
-        public int RowNumber { get; set; }
-        public int ColumnNumber { get; set; }
+        public string Path { get; set; }
+        public string Type { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Sample_Librarian.Model
     public class SourceFolder
     {
         public int Id { get; set; }
+        public int Pk { get; set; }
         public string Name { get; set; }
         public string FilePath { get; set; }
         public bool IsSelected { get; set; }

@@ -9,22 +9,11 @@ namespace Sample_Librarian.Services;
     {
         List<FileDataRow> dataRows = new List<FileDataRow>();
 
-    public async Task<List<FileDataRow>> GetFileDataRows(string filePath)
+    public List<FileDataRow> GetFileDataRows(string filePath)
     {
-        string localFilePathDirectory = @"X:\Programming\Projects\0323\Sample-Librarian\Resources\Raw";
-        System.IO.DirectoryInfo directoryInfo = new DirectoryInfo(localFilePathDirectory);
         try
         {
-            if (directoryInfo.GetFiles().Length > 0)
-            {
-                await Task.Run(() =>
-                {
-                    foreach (FileInfo file in directoryInfo.GetFiles())
-                    {
-                        file.Delete();
-                    }
-                });
-            }
+            
             if (dataRows.Count > 0) { dataRows.Clear(); };
             string[] files = Directory.GetFiles(filePath);
             for (int i = 0; i < files.Length; i++)

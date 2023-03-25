@@ -10,6 +10,7 @@ namespace Sample_Librarian.Model
     public class FileDataRow
     {
         public int Id { get; set; }
+        public int Pk { get; set; }
         public string FileName { get; set; }
         public string Length { get; set; }
         public string Format { get; set; }

@@ -15,6 +15,7 @@ using Plugin.Maui.Audio;
 using Microsoft.Maui.Controls;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Maui.Core.Primitives;
 
 namespace Sample_Librarian.ViewModel;
 public partial class MainViewModel : BaseViewModel
@@ -22,6 +23,7 @@ public partial class MainViewModel : BaseViewModel
     FileDataRowService fileDataRowService;
     CategoryService categoryService;
     SourceFolderService sourceFolderService;
+    DBService dBService;
     public IFolderPicker folderPicker;
 
     public ObservableCollection<FileDataRow> FileDataRows { get; set; } = new();
@@ -47,12 +49,31 @@ public partial class MainViewModel : BaseViewModel
     [ObservableProperty]
     string currentSourceFolderPath = "";
 
-    public MainViewModel(FileDataRowService fileDataRowService, CategoryService categoryService, SourceFolderService sourceFolderService, IFolderPicker folderPicker)
+    public MainViewModel(FileDataRowService fileDataRowService, CategoryService categoryService, SourceFolderService sourceFolderService, IFolderPicker folderPicker, DBService dBService)
     {
         this.fileDataRowService = fileDataRowService;
         this.categoryService = categoryService;
         this.sourceFolderService = sourceFolderService;
         this.folderPicker = folderPicker;
+        this.dBService = dBService;
+    }
+
+    public async Task OnAppStartup()
+    {
+        List<SourceFolder> sourceFolders = await DBService.GetSourceFolderFileDirectories();
+        if (sourceFolders == null || sourceFolders.Count > 0) {
+            CurrentSourceFolderPath = sourceFolders[0].FilePath;
+            sourceFolders[0].IsSelected = true;
+            IsSourceFolderPresent = true;
+            foreach (SourceFolder sourceFolder in sourceFolders)
+            {
+                SourceFolders.Add(sourceFolder);
+            }
+            GetFiles("");
+            await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
+            await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
+            await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
+        } else { return; }
     }
 
     [RelayCommand]
@@ -71,15 +92,16 @@ public partial class MainViewModel : BaseViewModel
             if (SourceFolders.Count > 3)
             {
                 IsSourceFoldersNotFull = false;
-            }
-                SourceFolders.Add(sourceFolder);
-                CurrentSourceFolderPath = sourceFolder.FilePath;
-                IsSourceFolderPresent = true;
-                await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
-                await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
-                await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
+            };
+            sourceFolder.Pk = await DBService.AddFileDirectory(sourceFolder.Name, sourceFolder.FilePath, "SourceFolder");
+            SourceFolders.Add(sourceFolder);
+            CurrentSourceFolderPath = sourceFolder.FilePath;
+            IsSourceFolderPresent = true;
+            await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
+            await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
+            await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
                 
-                await GetFiles(sourceFolder.FilePath);
+            GetFiles(sourceFolder.FilePath);
         }
         catch (Exception ex)
         {
@@ -90,14 +112,41 @@ public partial class MainViewModel : BaseViewModel
 
 
     [RelayCommand]
-    async Task GetFiles(string filePath)
+    public void GetFiles(string filePath)
     {
         try
         {
-            if (filePath == null || filePath.Length == 0) { filePath = @"X:\Programming\Projects\0323\Sample-Librarian\Resources\Raw"; }
+            if (filePath == null || filePath.Length == 0) { filePath = SourceFolders[0].FilePath; }
+            List<SourceFolder> sourceFolders = new();
+            SourceFolder selectedSourceFolder = new();
+            for (int i = 0; i < SourceFolders.Count; i++)
+            {
+                SourceFolders[i].IsSelected = false;
+                sourceFolders.Add(SourceFolders[i]);
+            }
+            foreach (var folder in sourceFolders)
+            {
+                if (folder.FilePath == filePath)
+                {
+                    selectedSourceFolder = folder;
+                    selectedSourceFolder.IsSelected = true;
+                } else { }
+            }
+            if (selectedSourceFolder != null)
+            {
+                sourceFolders.Remove(selectedSourceFolder);
+                sourceFolders.Insert(0, selectedSourceFolder);
+                SourceFolders.Clear();
+                OnPropertyChanged("SourceFolders");
+                for (int i = 0; i < sourceFolders.Count;i++)
+                {
+                    SourceFolders.Add(sourceFolders[i]);
+                }
+                OnPropertyChanged("SourceFolders");
+            }
             FileDataRows.Clear();
             OnPropertyChanged("FileDataRows");
-            List<FileDataRow> dataRows = await fileDataRowService.GetFileDataRows(filePath);
+            List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
             foreach (var dataRow in dataRows) {
                 if (dataRow.HasPlayer == true)
                 {
@@ -134,7 +183,7 @@ public partial class MainViewModel : BaseViewModel
         catch (Exception ex)
         { 
             Debug.WriteLine( ex );
-            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
 
@@ -374,8 +423,12 @@ public partial class MainViewModel : BaseViewModel
                     files.Add(FileDataRows[i]);
                 }
             }
-            files.ForEach((file) => File.Move(file.FilePath, $"{ActiveCatgoryFilePath}\\{file.FileName}{file.Format}"));
-            await GetFiles(CurrentSourceFolderPath);
+            await Task.Run(() =>
+            {
+                files.ForEach((file) => File.Move(file.FilePath, $"{ActiveCatgoryFilePath}\\{file.FileName}{file.Format}"));
+                GetFiles(CurrentSourceFolderPath);
+            });
+            
         }
         catch(Exception ex)
         {
@@ -392,7 +445,7 @@ public partial class MainViewModel : BaseViewModel
             bool confirmed = await Shell.Current.DisplayAlert("Delete these files?", null, "Yes", "No");
             if (confirmed)
             {
-                List<FileDataRow> files = new List<FileDataRow>();
+                List<FileDataRow> files = new();
                 for (int i = 0; i < FileDataRows.Count; i++)
                 {
                     if (FileDataRows[i].IsSelected)
@@ -401,7 +454,7 @@ public partial class MainViewModel : BaseViewModel
                     }
                 }
                 files.ForEach((file) => File.Delete(file.FilePath));
-                await GetFiles(CurrentSourceFolderPath);
+                GetFiles(CurrentSourceFolderPath);
             }
             else { return; }
         }

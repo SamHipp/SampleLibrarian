@@ -30,6 +30,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<SettingsPage>();
 		builder.Services.AddSingleton<SourceFolderService>();
 		builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
+		builder.Services.AddSingleton<DBService>();
 
 #if DEBUG
         builder.Logging.AddDebug();
