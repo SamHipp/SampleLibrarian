@@ -145,34 +145,15 @@ public partial class MainViewModel : BaseViewModel
     {
         try
         {
-            if (filePath == null || filePath.Length == 0) { filePath = SourceFolders[0].FilePath; }
-            List<SourceFolder> sourceFolders = new();
-            SourceFolder selectedSourceFolder = new();
             for (int i = 0; i < SourceFolders.Count; i++)
             {
                 SourceFolders[i].IsSelected = false;
-                sourceFolders.Add(SourceFolders[i]);
-            }
-            foreach (var folder in sourceFolders)
-            {
-                if (folder.FilePath == filePath)
+                if (SourceFolders[i].FilePath== filePath)
                 {
-                    selectedSourceFolder = folder;
-                    selectedSourceFolder.IsSelected = true;
-                } else { }
-            }
-            if (selectedSourceFolder.Name != null)
-            {
-                sourceFolders.Remove(selectedSourceFolder);
-                sourceFolders.Insert(0, selectedSourceFolder);
-                SourceFolders.Clear();
-                OnPropertyChanged("SourceFolders");
-                for (int i = 0; i < sourceFolders.Count;i++)
-                {
-                    SourceFolders.Add(sourceFolders[i]);
+                    SourceFolders[i].IsSelected = true;
                 }
-                OnPropertyChanged("SourceFolders");
             }
+            CurrentSourceFolderPath = filePath;
             FileDataRows.Clear();
             OnPropertyChanged("FileDataRows");
             List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
