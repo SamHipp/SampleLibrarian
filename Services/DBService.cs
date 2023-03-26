@@ -15,7 +15,7 @@ namespace Sample_Librarian.Services
         public static async Task Init()
         {
             if (db != null) { return; }
-            var databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SampleLibrarianDB.db");
+            var databasePath = Path.Combine(@"X:\Programming\Projects\0323\Sample-Librarian\Services", "SampleLibrarianDB.db");
             db = new SQLiteAsyncConnection(databasePath);
             await db.CreateTableAsync<FileDirectory>();
         }
@@ -33,8 +33,17 @@ namespace Sample_Librarian.Services
                 };
                 
 
-                int pk = await db.InsertAsync(fileDirectory);
-                return pk;
+                int objectsAddedNumber = await db.InsertAsync(fileDirectory);
+                if (objectsAddedNumber > 0)
+                {
+                    int pk = 0;
+                    List<FileDirectory> fileDirectories = await db.QueryAsync<FileDirectory>($"select * from FileDirectory where Type = '{type}' and Name = '{name}'");
+                    foreach (FileDirectory fd in fileDirectories)
+                    {
+                        pk = fd.Pk;
+                    }
+                    return pk;
+                } else { return 0; }
             }
             catch(Exception ex)
             {
@@ -48,8 +57,8 @@ namespace Sample_Librarian.Services
             try
             {
                 await Init();
-                await db.DeleteAsync<FileDirectory>(pk);
-                return true;
+                int objectsDeletedNumber = await db.DeleteAsync<FileDirectory>(pk);
+                if (objectsDeletedNumber > 0) { return true; } else { return false; }
             }
             catch (Exception ex)
             {

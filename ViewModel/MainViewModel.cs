@@ -77,7 +77,7 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    async Task AddSourceFolder(CancellationToken cancellationToken)
+    public async Task AddSourceFolder(CancellationToken cancellationToken)
     {
         try
         {
@@ -110,6 +110,35 @@ public partial class MainViewModel : BaseViewModel
         }
     }
 
+    [RelayCommand]
+    public async Task RemoveSourceFolder()
+    {
+        try
+        {
+            SourceFolder selectedSourceFolder = new();
+            foreach (var folder in SourceFolders)
+            {
+                if (folder.IsSelected == true)
+                {
+                    selectedSourceFolder = folder;
+                }
+            }
+            SourceFolders.Remove(selectedSourceFolder);
+            OnPropertyChanged(nameof(SourceFolders));
+            bool result = await DBService.RemoveFileDirectory(selectedSourceFolder.Pk);
+            if (result == true)
+            {
+                await Shell.Current.DisplayAlert("Source Folder Deleted!", $"The \"{selectedSourceFolder.Name}\" folder has been removed from the list.", "OK");
+            }
+            if (SourceFolders.Count == 0) { IsSourceFolderPresent = false; OnPropertyChanged(nameof(IsSourceFolderPresent)); }
+        }
+        catch(Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
 
     [RelayCommand]
     public void GetFiles(string filePath)
@@ -132,7 +161,7 @@ public partial class MainViewModel : BaseViewModel
                     selectedSourceFolder.IsSelected = true;
                 } else { }
             }
-            if (selectedSourceFolder != null)
+            if (selectedSourceFolder.Name != null)
             {
                 sourceFolders.Remove(selectedSourceFolder);
                 sourceFolders.Insert(0, selectedSourceFolder);

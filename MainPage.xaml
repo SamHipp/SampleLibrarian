@@ -58,6 +58,7 @@
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="-"
+                        Command="{Binding RemoveSourceFolderCommand}"
                         Background="#DD6666"
                         />
                     <Button
