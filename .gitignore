@@ -364,3 +364,7 @@ FodyWeavers.xsd
 
 # Test files for transfer
 Resources/Raw/
+
+# Local Database for SourceFolders + Categories Source
+*.db
+/Services/SampleLibrarianDB.db
