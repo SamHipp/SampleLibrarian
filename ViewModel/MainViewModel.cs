@@ -16,6 +16,7 @@ using Microsoft.Maui.Controls;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Maui.Core.Primitives;
+using System.Threading;
 
 namespace Sample_Librarian.ViewModel;
 public partial class MainViewModel : BaseViewModel
@@ -41,13 +42,16 @@ public partial class MainViewModel : BaseViewModel
     bool allSelected = false;
 
     [ObservableProperty]
-    bool isSourceFolderPresent = false;
+    public bool isSourceFolderPresent = false;
 
     [ObservableProperty]
-    bool isSourceFoldersNotFull = true;
+    public bool isSourceFoldersNotFull = true;
 
     [ObservableProperty]
-    string currentSourceFolderPath = "";
+    public string currentSourceFolderPath = "";
+
+    [ObservableProperty]
+    public string categoriesBaseFilePath = @"X:\Downloads\test\TestCategories";
 
     public MainViewModel(FileDataRowService fileDataRowService, CategoryService categoryService, SourceFolderService sourceFolderService, IFolderPicker folderPicker, DBService dBService)
     {
@@ -61,6 +65,8 @@ public partial class MainViewModel : BaseViewModel
     public async Task OnAppStartup()
     {
         List<SourceFolder> sourceFolders = await DBService.GetSourceFolderFileDirectories();
+        FileDirectory categoriesBaseFPFD = await DBService.GetCategoryFileDirectory();
+        if (categoriesBaseFPFD != null) { CategoriesBaseFilePath = categoriesBaseFPFD.Path; }
         if (sourceFolders == null || sourceFolders.Count > 0) {
             CurrentSourceFolderPath = sourceFolders[0].FilePath;
             sourceFolders[0].IsSelected = true;
@@ -69,7 +75,7 @@ public partial class MainViewModel : BaseViewModel
             {
                 SourceFolders.Add(sourceFolder);
             }
-            GetFiles("");
+            GetFiles(sourceFolders[0].FilePath);
             await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
             await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
             await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
@@ -185,7 +191,7 @@ public partial class MainViewModel : BaseViewModel
                 FileDataRows.Add(dataRow); 
             };
             if (CategoryGroups.Count > 0) { CategoryGroups.Clear(); }
-            GetCategoryGroup("");
+            GetCategoryGroup(CategoriesBaseFilePath);
             OnPropertyChanged("FileDataRows");
             OnPropertyChanged("CategoryGroups");
             OnPropertyChanged();
@@ -202,7 +208,7 @@ public partial class MainViewModel : BaseViewModel
     {
         try
         {
-
+            if (parentFilePath == null || parentFilePath.Length == 0) { parentFilePath = CategoriesBaseFilePath; }
             CategoryGroup categoryGroup = CategoryService.GetCategoryGroup(parentFilePath);
             categoryGroup.AddCategoryText = "+";
             for (int i = CategoryGroups.Count - 1; i >= 0; i--)
@@ -243,6 +249,31 @@ public partial class MainViewModel : BaseViewModel
         {
             Debug.WriteLine(ex);
             Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    public async Task SetCategoriesBaseFilePath(CancellationToken cancellationToken)
+    {
+        try
+        {
+            FileDirectory fileDirectory = await categoryService.SetBaseFilePath(cancellationToken);
+            fileDirectory.Pk = await DBService.AddFileDirectory(fileDirectory.Name, fileDirectory.Path, "Category");
+            if (fileDirectory.Pk != 0) {
+                CategoriesBaseFilePath = fileDirectory.Path;
+                OnPropertyChanged(nameof(CategoriesBaseFilePath));
+
+                GetFiles(SourceFolders[0].FilePath);
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error!", "Couldn't set the Categories base directory", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
 

@@ -32,7 +32,21 @@ namespace Sample_Librarian.Services
                     Type = type
                 };
                 
-
+                if (type == "Category")
+                {
+                    var existingFileDirectory = await db.QueryAsync<FileDirectory>("select * from FileDirectory where Type = 'Category'");
+                    if (existingFileDirectory.Count > 0)
+                    {
+                        int modifiedRows = await db.ExecuteAsync($"DELETE FROM FileDirectory WHERE Type = 'Category'");
+                        int rowsAddedNumber = await db.InsertAsync(fileDirectory);
+                        if (modifiedRows != 0 && rowsAddedNumber != 0) { return 1; } else { return 0; }
+                    }
+                    else
+                    {
+                        int rowsAddedNumber = await db.InsertAsync(fileDirectory);
+                        return rowsAddedNumber;
+                    }
+                }
                 int objectsAddedNumber = await db.InsertAsync(fileDirectory);
                 if (objectsAddedNumber > 0)
                 {

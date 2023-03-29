@@ -1,4 +1,5 @@
-﻿using Sample_Librarian.Model;
+﻿using CommunityToolkit.Maui.Storage;
+using Sample_Librarian.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -66,6 +67,24 @@ namespace Sample_Librarian.Services
                 Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
                 return null;
             }
+        }
+
+        public async Task<FileDirectory> SetBaseFilePath(CancellationToken cancellationToken)
+        {
+            FileDirectory directory = new();
+            try
+            {
+                var result = await FolderPicker.Default.PickAsync(cancellationToken);
+                result.EnsureSuccess();
+                directory.Path = result.Folder.Path;
+                directory.Name = result.Folder.Name;
+                directory.Type = "Category";
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            return directory;
         }
     }
 }

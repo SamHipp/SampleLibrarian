@@ -36,6 +36,7 @@
                                     WidthRequest="170"
                                     FontSize="20"
                                     Text="{Binding Name}"
+                                    ToolTipProperties.Text="{Binding FilePath}"
                                     CommandParameter="{Binding FilePath}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GetFilesCommand}"
                                     >
@@ -58,6 +59,7 @@
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="-"
+                        ToolTipProperties.Text="Remove the selected source folder from the collection"
                         Command="{Binding RemoveSourceFolderCommand}"
                         Background="#DD6666"
                         />
@@ -66,6 +68,7 @@
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="+"
+                        ToolTipProperties.Text="Add a source folder to the collection"
                         Command="{Binding AddSourceFolderCommand}"
                         />
                     <HorizontalStackLayout
@@ -174,6 +177,7 @@
                                     Padding="0"
                                     Margin="0, 0, 5, 0"
                                     FontSize="10"
+                                    ToolTipProperties.Text="Play this sample"
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PlaySoundCommand}"
                                     />
@@ -241,6 +245,7 @@
                         HeightRequest="40"
                         WidthRequest="170"
                         Text="Clear"
+                        ToolTipProperties.Text="Clear the current categories"
                         Command="{Binding ClearCategoriesCommand}"
                         Margin="20, 0"
                         />
@@ -248,7 +253,8 @@
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="..."
-                        Command="{Binding NavigateToSettingsCommand}"
+                        ToolTipProperties.Text="Choose the location for your category folders"
+                        Command="{Binding SetCategoriesBaseFilePathCommand}"
                         Margin="0, 0, 20, 0"
                         Padding="10, 0"
                         />
@@ -354,6 +360,7 @@
                         WidthRequest="200"
                         Text="DELETE"
                         Command="{Binding DeleteFilesCommand}"
+                        ToolTipProperties.Text="Delete the selected files form the source folder"
                         Background="#DD6666"
                         Margin="10"
                         VerticalOptions="Center"
@@ -363,6 +370,7 @@
                         WidthRequest="200"
                         Text="CONFIRM"
                         Command="{Binding MoveFilesCommand}"
+                        ToolTipProperties.Text="Move the selected files to the selected category folder"
                         Margin="10"
                         Padding="10, 0"
                         VerticalOptions="Center"
