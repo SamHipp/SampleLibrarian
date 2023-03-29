@@ -304,7 +304,21 @@
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>
                                 </Grid>
-                                <Button
+                                <HorizontalStackLayout
+                                    WidthRequest="692"
+                                    HeightRequest="45"
+                                    Spacing="60"
+                                    Padding="140, 0, 20, 0">
+                                    <Button
+                                    HeightRequest="40"
+                                    WidthRequest="170"
+                                    FontSize="20"
+                                    Text="-"
+                                    ToolTipProperties.Text="Delete the selected category folder along with all of its contents"
+                                    Background="#DD6666"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=DeleteCategoryCommand}"
+                                    />
+                                    <Button
                                     HeightRequest="40"
                                     WidthRequest="170"
                                     FontSize="20"
@@ -312,6 +326,7 @@
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=StartAddCategoryCommand}"
                                     />
+                                </HorizontalStackLayout>
                                 <Entry
                                     IsVisible="{Binding IsAdding}"
                                     Placeholder="Type..."
@@ -360,7 +375,7 @@
                         WidthRequest="200"
                         Text="DELETE"
                         Command="{Binding DeleteFilesCommand}"
-                        ToolTipProperties.Text="Delete the selected files form the source folder"
+                        ToolTipProperties.Text="Delete the selected files from the source folder"
                         Background="#DD6666"
                         Margin="10"
                         VerticalOptions="Center"

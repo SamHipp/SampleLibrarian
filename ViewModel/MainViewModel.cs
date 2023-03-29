@@ -407,6 +407,43 @@ public partial class MainViewModel : BaseViewModel
             await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
+
+    [RelayCommand]
+    public async Task DeleteCategory()
+    {
+        string name = "";
+        try
+        {
+            name = Path.GetFileNameWithoutExtension(ActiveCatgoryFilePath);
+            bool confirmed = await Shell.Current.DisplayAlert($"Delete the \"{name}\" folder and all its contents?", null, "Yes", "No");
+            if (confirmed)
+            {
+                for (int i = 0; i < CategoryGroups.Count; i++)
+                {
+                    if (CategoryGroups[i].IsAdding == true)
+                    {
+                        CategoryGroups[i].IsAdding = false;
+                    }
+                    CategoryGroups[i].AddCategoryText = "+";
+                    if (CategoryGroups[i].FilePath == ActiveCatgoryFilePath)
+                    {
+                        Directory.Delete(ActiveCatgoryFilePath, true);
+                        CategoryGroups.Remove(CategoryGroups[i]);
+                        OnPropertyChanged("CategoryGroups");
+                    }
+                }
+                CategoryGroups.Clear();
+                GetCategoryGroup(CategoriesBaseFilePath);
+
+            }
+            else { return; }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
     public void OnAllSelectedChanged()
     {
         try
