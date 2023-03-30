@@ -8,19 +8,31 @@
              x:Class="Sample_Librarian.MainPage">
 
     <ScrollView>
-        <HorizontalStackLayout
-            >
-            <VerticalStackLayout
-                WidthRequest="1220"
-                Spacing="0"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="700" />
+            </Grid.ColumnDefinitions>
+            <Grid
+                Grid.Column="0"
                 >
-                <HorizontalStackLayout
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid
                     x:Name="FileNav"
-                    HeightRequest="60"
                     Background="#D2EDF3"
                     Padding="20, 0"
-                    Spacing="0"
+                    Grid.Row="0"
                     >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="230" />
+                    </Grid.ColumnDefinitions>
                     <CollectionView
                     IsVisible="{Binding IsSourceFolderPresent}"
                     ItemsSource="{Binding SourceFolders}"
@@ -28,6 +40,7 @@
                     WidthRequest="860"
                     FlowDirection="LeftToRight"
                     ItemsLayout="HorizontalList"
+                    Grid.Column="0"
                     >
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="model:SourceFolder">
@@ -62,6 +75,7 @@
                         ToolTipProperties.Text="Remove the selected source folder from the collection"
                         Command="{Binding RemoveSourceFolderCommand}"
                         Background="#DD6666"
+                        Grid.Column="1"
                         />
                     <Button
                         IsVisible="{Binding IsSourceFoldersNotFull}"
@@ -70,11 +84,13 @@
                         Text="+"
                         ToolTipProperties.Text="Add a source folder to the collection"
                         Command="{Binding AddSourceFolderCommand}"
+                        Grid.Column="2"
                         />
                     <HorizontalStackLayout
                         Spacing="20"
                         FlexLayout.Basis="230"
                         Margin="20, 0, 20, 0"
+                        Grid.Column="3"
                         >
                         <Image
                         Source="volume_icon.png"
@@ -91,20 +107,28 @@
                                 ></Slider>
                     </HorizontalStackLayout>
                     
-                </HorizontalStackLayout>
-                <HorizontalStackLayout
+                </Grid>
+                <Grid
                     x:Name="FileTableHeader"
                     HeightRequest="20"
-                    Spacing="20"
                     Padding="20, 0, 20, 0"
                     Background="#B0B0B0"
+                    Grid.Row="1"
                     >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="120" />
+                    </Grid.ColumnDefinitions>
                     <CheckBox
                         x:Name="FileTableHeaderCheckBox"
-                        Margin="0, 0, 20, 0"
-                        WidthRequest="20"
                         IsChecked="{Binding AllSelected}"
                         CheckedChanged="OnSelectAllChanged"
+                        Grid.Column="0"
                         >
                     </CheckBox>
                     <Label
@@ -112,62 +136,62 @@
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
-                            Margin="10, 0"
-                            WidthRequest="470"
-                            FlexLayout.Basis="500"
+                            Grid.Column="2"
                                 ></Label>
                     <Label
                             Text="Length"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
-                            Margin="10, 0"
-                            WidthRequest="100"
+                            Grid.Column="3"
                                 ></Label>
                     <Label
                             Text="Format"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
-                            Margin="10, 0"
-                            WidthRequest="100"
+                            Grid.Column="4"
                                 ></Label>
                     <Label
                             Text="Bit-Rate"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
-                            Margin="10, 0"
-                            WidthRequest="100"
+                            Grid.Column="5"
                                 ></Label>
                     <Label
                             Text="Size"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
-                            Margin="10, 0, 30, 0"
-                            WidthRequest="100"
+                            Grid.Column="6"
                                 ></Label>
-                </HorizontalStackLayout>
+                </Grid>
                 <CollectionView
                     ItemsSource="{Binding FileDataRows}"
                     Background="White"
-                    HeightRequest="1333"
-                    FlexLayout.Basis="1333"
+                    Grid.Row="2"
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:FileDataRow">
-                            <HorizontalStackLayout
+                            <Grid
                                 HeightRequest="20"
-                                FlexLayout.Basis="20"
-                                Padding="10, 0, 20, 0"
                                 Background="#F2F4F4"
-                                Spacing="0"
+                                Padding="20, 0, 20, 0"
                                 >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="120" />
+                                </Grid.ColumnDefinitions>
                                 <CheckBox
                                     x:Name="{Binding FileName}"
-                                    Margin="10, 0, 0, 0"
                                     IsChecked="{Binding IsSelected}"
+                                    Grid.Column="0"
                                     ></CheckBox>
                                 <Button
                                     IsVisible="{Binding HasPlayer}"
@@ -180,53 +204,53 @@
                                     ToolTipProperties.Text="Play this sample"
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PlaySoundCommand}"
+                                    Grid.Column="1"
                                     />
                                 <Label
                                         Text="{Binding FileName}"
                                         FontSize="16"
-                                        Margin="10, 0, 0, 0"
-                                        WidthRequest="500"
-                                        FlexLayout.Basis="500"
+                                        Grid.Column="2"
                                             ></Label>
                                 <Label
                                         Text="{Binding Length}"
                                         FontSize="16"
-                                        Margin="10, 0"
-                                        WidthRequest="120"
+                                        Grid.Column="3"
                                             ></Label>
                                 <Label
                                         Text="{Binding Format}"
                                         FontSize="16"
-                                        Margin="10, 0"
-                                        WidthRequest="120"
+                                        Grid.Column="4"
                                             ></Label>
                                 <Label
                                         Text="{Binding BitRate}"
                                         FontSize="16"
-                                        Margin="10, 0"
-                                        WidthRequest="100"
+                                        Grid.Column="5"
                                             ></Label>
                                 <Label
                                         Text="{Binding Size}"
                                         FontSize="16"
-                                        Margin="10, 0, 30, 0"
-                                        WidthRequest="100"
+                                        Grid.Column="6"
                                             ></Label>
-                            </HorizontalStackLayout>
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </VerticalStackLayout>
-            <VerticalStackLayout
-                WidthRequest="700"
+            </Grid>
+            <Grid
                 Background="#ECF7F9"
+                Grid.Column="1"
                 >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="60" />
+                </Grid.RowDefinitions>
                 <HorizontalStackLayout
                     x:Name="CategoriesHeader"
-                    HeightRequest="60"
                     Background="#ECF7F9"
                     Padding="20, 0"
                     Spacing="170"
+                    Grid.Row="0"
                     >
                     <Label
                         Text="Categorize:"
@@ -264,7 +288,7 @@
                 <CollectionView
                     ItemsSource="{Binding CategoryGroups}"
                     Background="White"
-                    HeightRequest="1250"
+                    Grid.Row="1"
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:CategoryGroup">
@@ -365,8 +389,8 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
                 <HorizontalStackLayout
-                        HeightRequest="60"
-                        Margin="0, 20, 0, 0"
+                        Grid.Row="2"
+                        Background="#ECF7F9"
                         Spacing="50"
                         Padding="100, 0, 20, 0"
                         >
@@ -391,14 +415,14 @@
                         VerticalOptions="Center"
                         />
                 </HorizontalStackLayout>
-            </VerticalStackLayout>
+            </Grid>
 
             <!--<Label
                 Text="Categories"
                 Background="Blue"
                 WidthRequest="600"
                 />-->
-        </HorizontalStackLayout>
+        </Grid>
     </ScrollView>
 
 </ContentPage>
