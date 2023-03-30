@@ -21,6 +21,7 @@ namespace Sample_Librarian.Model
         public bool isPlaying { get; set; }
         public IAudioPlayer Player { get; set; }
         public bool HasPlayer { get; set; }
+        public string PlayerIcon { get; set; }
         public bool IsSelected { get; set; }
     }
 }

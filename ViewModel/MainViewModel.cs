@@ -553,11 +553,13 @@ public partial class MainViewModel : BaseViewModel
             if (fileDataRow.Player.IsPlaying)
             {
                 fileDataRow.Player.Stop();
+                fileDataRow.PlayerIcon = "play_icon.png";
             }
             else
             {
                 fileDataRow.Player.Volume = (VolumeLevel / 100);
                 fileDataRow.Player.Play();
+                fileDataRow.PlayerIcon = "pause_icon.png";
             }
         }
         catch (Exception ex)

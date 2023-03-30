@@ -111,7 +111,7 @@
                 <Grid
                     x:Name="FileTableHeader"
                     HeightRequest="20"
-                    Padding="20, 0, 20, 0"
+                    Padding="22, 0, 22, 0"
                     Background="#B0B0B0"
                     Grid.Row="1"
                     >
@@ -174,64 +174,74 @@
                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:FileDataRow">
-                            <Grid
-                                HeightRequest="20"
+                            <Border Stroke="white"
+                                    StrokeThickness="2"
+                                    VerticalOptions="Center"
+                                    >
+                                <Grid
+                                HeightRequest="44"
                                 Background="#F2F4F4"
                                 Padding="20, 0, 20, 0"
                                 >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40" />
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="120" />
-                                    <ColumnDefinition Width="120" />
-                                    <ColumnDefinition Width="120" />
-                                    <ColumnDefinition Width="120" />
-                                </Grid.ColumnDefinitions>
-                                <CheckBox
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="120" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
                                     x:Name="{Binding FileName}"
                                     IsChecked="{Binding IsSelected}"
                                     Grid.Column="0"
                                     ></CheckBox>
-                                <Button
+                                    <ImageButton
+                                    Aspect="AspectFit"
+                                    MaximumHeightRequest="10"
+                                    WidthRequest="10"
+                                    Source="{Binding PlayerIcon}"
                                     IsVisible="{Binding HasPlayer}"
-                                    HeightRequest="20"
-                                    WidthRequest="40"
-                                    Text=">"
                                     Padding="0"
-                                    Margin="0, 0, 5, 0"
-                                    FontSize="10"
-                                    ToolTipProperties.Text="Play this sample"
+                                    ToolTipProperties.Text="Play/pause this sample"
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PlaySoundCommand}"
                                     Grid.Column="1"
                                     />
-                                <Label
+                                    <Label
                                         Text="{Binding FileName}"
                                         FontSize="16"
                                         Grid.Column="2"
+                                        VerticalOptions="Center"
                                             ></Label>
-                                <Label
+                                    <Label
                                         Text="{Binding Length}"
                                         FontSize="16"
                                         Grid.Column="3"
+                                        VerticalOptions="Center"
                                             ></Label>
-                                <Label
+                                    <Label
                                         Text="{Binding Format}"
                                         FontSize="16"
                                         Grid.Column="4"
+                                        VerticalOptions="Center"
                                             ></Label>
-                                <Label
+                                    <Label
                                         Text="{Binding BitRate}"
                                         FontSize="16"
                                         Grid.Column="5"
+                                        VerticalOptions="Center"
                                             ></Label>
-                                <Label
+                                    <Label
                                         Text="{Binding Size}"
                                         FontSize="16"
                                         Grid.Column="6"
+                                        VerticalOptions="Center"
                                             ></Label>
-                            </Grid>
+                                </Grid>
+                            </Border>
+                            
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -243,7 +253,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="60" />
+                    <RowDefinition Height="80" />
                 </Grid.RowDefinitions>
                 <HorizontalStackLayout
                     x:Name="CategoriesHeader"
@@ -259,6 +269,7 @@
                         HorizontalTextAlignment="Start"
                         FlexLayout.Grow="1"
                         WidthRequest="200"
+                                        VerticalOptions="Center"
                         ></Label>
                     <HorizontalStackLayout
                         WidthRequest="350"
@@ -392,7 +403,7 @@
                         Grid.Row="2"
                         Background="#ECF7F9"
                         Spacing="50"
-                        Padding="100, 0, 20, 0"
+                        Padding="100, 10, 20, 10"
                         >
                     <Button
                         HeightRequest="60"

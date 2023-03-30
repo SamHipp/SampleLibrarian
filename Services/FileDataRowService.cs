@@ -31,6 +31,7 @@ namespace Sample_Librarian.Services;
                     Stream stream = new FileStream(fileDataRow.FilePath, FileMode.Open, FileAccess.Read);
                     fileDataRow.Player = AudioManager.Current.CreatePlayer(stream);
                     fileDataRow.HasPlayer = true;
+                    fileDataRow.PlayerIcon = "play_icon.png";
                 }
                 dataRows.Add(fileDataRow);
             }
