@@ -191,6 +191,7 @@ public partial class MainViewModel : BaseViewModel
                 FileDataRows.Add(dataRow); 
             };
             if (CategoryGroups.Count > 0) { CategoryGroups.Clear(); }
+            AllSelected = false;
             GetCategoryGroup(CategoriesBaseFilePath);
             OnPropertyChanged("FileDataRows");
             OnPropertyChanged("CategoryGroups");
@@ -444,7 +445,7 @@ public partial class MainViewModel : BaseViewModel
             await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
-    public void OnAllSelectedChanged()
+    public async Task OnAllSelectedChanged()
     {
         try
         {
@@ -462,7 +463,7 @@ public partial class MainViewModel : BaseViewModel
                 {
                     FileDataRows.Add(fileDataRows[i]);
                 }
-                OnPropertyChanged(nameof(FileDataRows));
+                await Task.Run(() => { OnPropertyChanged(); });
             }
             else
             {
@@ -484,7 +485,7 @@ public partial class MainViewModel : BaseViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
 
