@@ -76,6 +76,7 @@ public partial class MainViewModel : BaseViewModel
                 SourceFolders.Add(sourceFolder);
             }
             GetFiles(sourceFolders[0].FilePath);
+            if (CategoriesBaseFilePath.Length > 0) { GetCategoryGroup(CategoriesBaseFilePath); }
             await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
             await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
             await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
@@ -190,11 +191,8 @@ public partial class MainViewModel : BaseViewModel
                 
                 FileDataRows.Add(dataRow); 
             };
-            if (CategoryGroups.Count > 0) { CategoryGroups.Clear(); }
             AllSelected = false;
-            GetCategoryGroup(CategoriesBaseFilePath);
             OnPropertyChanged("FileDataRows");
-            OnPropertyChanged("CategoryGroups");
             OnPropertyChanged();
         }
         catch (Exception ex)

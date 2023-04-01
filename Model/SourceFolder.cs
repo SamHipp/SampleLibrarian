@@ -8,12 +8,17 @@ using System.Threading.Tasks;
 
 namespace Sample_Librarian.Model
 {
-    public class SourceFolder
+    public class SourceFolder : ObservableValidator
     {
         public int Id { get; set; }
         public int Pk { get; set; }
         public string Name { get; set; }
         public string FilePath { get; set; }
-        public bool IsSelected { get; set; }
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get => isSelected;
+            set => SetProperty(ref isSelected, value, true);
+        }
     }
 }
