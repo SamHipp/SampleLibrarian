@@ -37,7 +37,6 @@
                     IsVisible="{Binding IsSourceFolderPresent}"
                     ItemsSource="{Binding SourceFolders}"
                     Background="#D2EDF3"
-                    WidthRequest="860"
                     FlowDirection="LeftToRight"
                     ItemsLayout="HorizontalList"
                     Grid.Column="0"

@@ -451,34 +451,17 @@ public partial class MainViewModel : BaseViewModel
         {
             if (AllSelected)
             {
-                Collection<FileDataRow> fileDataRows = new Collection<FileDataRow>();
                 for (int i = 0; i < FileDataRows.Count; i++)
                 {
                     FileDataRows[i].IsSelected = true;
-                    fileDataRows.Add(FileDataRows[i]);
                 }
-                FileDataRows.Clear();
-                for (int i = 0; i < fileDataRows.Count; i++)
-                {
-                    FileDataRows.Add(fileDataRows[i]);
-                }
-                await Task.Run(() => { OnPropertyChanged(nameof(FileDataRows)); });
             }
             else
             {
-                Collection<FileDataRow> fileDataRows = new Collection<FileDataRow>();
                 for (int i = 0; i < FileDataRows.Count; i++)
                 {
                     FileDataRows[i].IsSelected = false;
-                    fileDataRows.Add(FileDataRows[i]);
                 }
-                FileDataRows.Clear();
-                OnPropertyChanged(nameof(FileDataRows));
-                for (int i = 0; i < fileDataRows.Count; i++)
-                {
-                    FileDataRows.Add(fileDataRows[i]);
-                }
-                OnPropertyChanged(nameof(FileDataRows));
             }
         }
         catch (Exception ex)
