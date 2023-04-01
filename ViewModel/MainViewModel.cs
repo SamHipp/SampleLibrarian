@@ -458,12 +458,11 @@ public partial class MainViewModel : BaseViewModel
                     fileDataRows.Add(FileDataRows[i]);
                 }
                 FileDataRows.Clear();
-                OnPropertyChanged(nameof(FileDataRows));
                 for (int i = 0; i < fileDataRows.Count; i++)
                 {
                     FileDataRows.Add(fileDataRows[i]);
                 }
-                await Task.Run(() => { OnPropertyChanged(); });
+                await Task.Run(() => { OnPropertyChanged(nameof(FileDataRows)); });
             }
             else
             {

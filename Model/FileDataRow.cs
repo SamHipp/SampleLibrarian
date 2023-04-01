@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Plugin.Maui.Audio;
 
 namespace Sample_Librarian.Model
 {
-    public class FileDataRow
+    public partial class FileDataRow : ObservableValidator
     {
         public int Id { get; set; }
         public int Pk { get; set; }
@@ -22,6 +23,10 @@ namespace Sample_Librarian.Model
         public IAudioPlayer Player { get; set; }
         public bool HasPlayer { get; set; }
         public string PlayerIcon { get; set; }
-        public bool IsSelected { get; set; }
+        private bool isSelected;
+        public bool IsSelected { 
+            get => isSelected; 
+            set => SetProperty(ref isSelected, value, true);
+        }
     }
 }
