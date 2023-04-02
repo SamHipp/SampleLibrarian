@@ -205,14 +205,24 @@
                                     Aspect="AspectFit"
                                     MaximumHeightRequest="10"
                                     WidthRequest="10"
-                                    Source="{Binding PlayerIcon}"
                                     IsVisible="{Binding HasPlayer}"
                                     Padding="0"
                                     ToolTipProperties.Text="Play/pause this sample"
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PlaySoundCommand}"
                                     Grid.Column="1"
-                                    />
+                                    >
+                                        <ImageButton.Style>
+                                            <Style TargetType="ImageButton">
+                                                <Setter Property="Source" Value="play_icon.png" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Player.IsPlaying}" Value="true" TargetType="ImageButton">
+                                                        <Setter Property="Source" Value="pause_icon.png" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ImageButton.Style>
+                                    </ImageButton>
                                     <Button
                                         IsVisible="{Binding IsNotChangingName}"
                                         Text="{Binding FileName}"

@@ -22,7 +22,12 @@ namespace Sample_Librarian.Model
         public bool isPlaying { get; set; }
         public IAudioPlayer Player { get; set; }
         public bool HasPlayer { get; set; }
-        public string PlayerIcon { get; set; }
+        private string playerIcon;
+        public string PlayerIcon
+        {
+            get => playerIcon;
+            set => SetProperty(ref playerIcon, value, true);
+        }
         private bool isSelected;
         public bool IsSelected { 
             get => isSelected; 

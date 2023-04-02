@@ -652,8 +652,8 @@ public partial class MainViewModel : BaseViewModel
             else
             {
                 fileDataRow.Player.Volume = (VolumeLevel / 100);
-                fileDataRow.Player.Play();
                 fileDataRow.PlayerIcon = "pause_icon.png";
+                fileDataRow.Player.Play();
             }
         }
         catch (Exception ex)
