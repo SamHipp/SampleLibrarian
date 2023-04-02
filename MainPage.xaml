@@ -5,7 +5,8 @@
              xmlns:model="clr-namespace:Sample_Librarian.Model"
              xmlns:viewmodel="clr-namespace:Sample_Librarian.ViewModel"
              x:DataType="viewmodel:MainViewModel"
-             x:Class="Sample_Librarian.MainPage">
+             x:Class="Sample_Librarian.MainPage"
+             Shell.NavBarIsVisible="false">
 
     <ScrollView>
         <Grid>
