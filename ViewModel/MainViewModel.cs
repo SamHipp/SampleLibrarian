@@ -377,7 +377,7 @@ public partial class MainViewModel : BaseViewModel
                 CategoriesBaseFilePath = fileDirectory.Path;
                 OnPropertyChanged(nameof(CategoriesBaseFilePath));
 
-                await GetFiles(SourceFolders[0].FilePath);
+                GetCategoryGroup(fileDirectory.Path);
             }
             else
             {

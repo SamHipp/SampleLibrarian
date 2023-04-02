@@ -15,7 +15,7 @@ namespace Sample_Librarian.Services
         public static async Task Init()
         {
             if (db != null) { return; }
-            var databasePath = Path.Combine(@"X:\Programming\Projects\0323\Sample-Librarian\Services", "SampleLibrarianDB.db");
+            var databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SampleLibrarianDB.db");
             db = new SQLiteAsyncConnection(databasePath);
             await db.CreateTableAsync<FileDirectory>();
         }
