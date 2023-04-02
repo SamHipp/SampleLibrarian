@@ -33,7 +33,7 @@ public partial class MainViewModel : BaseViewModel
 
     public ObservableCollection<CategoryGroup> CategoryGroups { get; set; } = new();
 
-    public string ActiveCatgoryFilePath = null;
+    public string ActiveCategoryFilePath = null;
 
     [ObservableProperty]
     double volumeLevel = 100;
@@ -203,6 +203,109 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    public void StartChangeFDRName(FileDataRow fileDataRow)
+    {
+        try
+        {
+            fileDataRow.IsChangingName = true;
+            fileDataRow.IsNotChangingName = false;
+            for (int i = 0; i < FileDataRows.Count; i++)
+            {
+                if (FileDataRows[i].IsChangingName == true)
+                {
+                    FileDataRows[i].IsChangingName = false;
+                    FileDataRows[i].IsNotChangingName = true;
+                }
+                if (FileDataRows[i].Id == fileDataRow.Id)
+                {
+                    FileDataRows[i].IsChangingName = true;
+                    FileDataRows[i].IsNotChangingName = false;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    public void FDRNameChanged(string inputText)
+    {
+        try
+        {
+            for (int i = 0; i < FileDataRows.Count; i++)
+            {
+                if (FileDataRows[i].IsChangingName == true)
+                {
+                    bool alreadyExists = false;
+                    try
+                    {
+                        for (int j = 0; j < FileDataRows.Count; j++)
+                        {
+                            if (FileDataRows[j].FileName == inputText)
+                            {
+                                alreadyExists = true;
+                            }
+                        }
+                        if (!alreadyExists)
+                        {
+                            if (FileDataRows[i].HasPlayer == true)
+                            {
+                                FileDataRows[i].Player.Dispose();
+                                FileDataRows[i].Player = null;
+                            }
+                            string newFilePath = $"{CurrentSourceFolderPath}\\{inputText}{FileDataRows[i].Format}";
+                            Directory.Move(FileDataRows[i].FilePath, newFilePath);
+                            GetFiles(CurrentSourceFolderPath);
+                        }
+                        else
+                        {
+                            Shell.Current.DisplayAlert("Error!", $"The {inputText} file already exists!", "OK");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                        Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+                    }
+
+                }
+            }
+            OnPropertyChanged("CategoryGroups");
+            OnPropertyChanged();
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    public void CancelChangeFDRName()
+    {
+        try
+        {
+            for (int i = 0; i < FileDataRows.Count; i++)
+            {
+                if (FileDataRows[i].IsChangingName == true)
+                {
+                    FileDataRows[i].IsChangingName = false;
+                    FileDataRows[i].IsNotChangingName = true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
     public void GetCategoryGroup(string parentFilePath)
     {
         try
@@ -217,8 +320,8 @@ public partial class MainViewModel : BaseViewModel
                 }
             }
             CategoryGroups.Add(categoryGroup);
-            ActiveCatgoryFilePath = parentFilePath;
-            if (ActiveCatgoryFilePath != null && ActiveCatgoryFilePath.Length > 0) 
+            ActiveCategoryFilePath = parentFilePath;
+            if (ActiveCategoryFilePath != null && ActiveCategoryFilePath.Length > 0) 
             {
                 for (int i = 0; i < CategoryGroups.Count; i++)
                 {
@@ -295,7 +398,6 @@ public partial class MainViewModel : BaseViewModel
                 }
             }
             categoryGroup.IsAdding= true;
-            categoryGroup.AddCategoryText = "";
             for (int i = 0; i < CategoryGroups.Count; i++)
             {
                 if (CategoryGroups[i].Id == categoryGroup.Id)
@@ -407,7 +509,7 @@ public partial class MainViewModel : BaseViewModel
         string name = "";
         try
         {
-            name = Path.GetFileNameWithoutExtension(ActiveCatgoryFilePath);
+            name = Path.GetFileNameWithoutExtension(ActiveCategoryFilePath);
             bool confirmed = await Shell.Current.DisplayAlert($"Delete the \"{name}\" folder and all its contents?", null, "Yes", "No");
             if (confirmed)
             {
@@ -418,9 +520,9 @@ public partial class MainViewModel : BaseViewModel
                         CategoryGroups[i].IsAdding = false;
                     }
                     CategoryGroups[i].AddCategoryText = "+";
-                    if (CategoryGroups[i].FilePath == ActiveCatgoryFilePath)
+                    if (CategoryGroups[i].FilePath == ActiveCategoryFilePath)
                     {
-                        Directory.Delete(ActiveCatgoryFilePath, true);
+                        Directory.Delete(ActiveCategoryFilePath, true);
                         CategoryGroups.Remove(CategoryGroups[i]);
                         OnPropertyChanged("CategoryGroups");
                     }
@@ -478,7 +580,7 @@ public partial class MainViewModel : BaseViewModel
             }
             await Task.Run(() =>
             {
-                files.ForEach((file) => File.Move(file.FilePath, $"{ActiveCatgoryFilePath}\\{file.FileName}{file.Format}"));
+                files.ForEach((file) => File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}"));
                 GetFiles(CurrentSourceFolderPath);
             });
             

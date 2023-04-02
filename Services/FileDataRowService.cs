@@ -26,6 +26,8 @@ namespace Sample_Librarian.Services;
                 fileDataRow.FileName = Path.GetFileNameWithoutExtension(files[i]);
                 fileDataRow.Size = fileInfo.Length.ToString();
                 fileDataRow.FilePath = files[i];
+                fileDataRow.IsChangingName = false;
+                fileDataRow.IsNotChangingName = true;
                 if (fileDataRow.Format == ".wav" || fileDataRow.Format == ".mp3")
                 {
                     Stream stream = new FileStream(fileDataRow.FilePath, FileMode.Open, FileAccess.Read);

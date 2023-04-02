@@ -28,5 +28,17 @@ namespace Sample_Librarian.Model
             get => isSelected; 
             set => SetProperty(ref isSelected, value, true);
         }
+        private bool isChangingName;
+        public bool IsChangingName
+        {
+            get => isChangingName;
+            set => SetProperty(ref isChangingName, value, true);
+        }
+        private bool isNotChangingName;
+        public bool IsNotChangingName
+        {
+            get => isNotChangingName;
+            set => SetProperty(ref isNotChangingName, value, true);
+        }
     }
 }

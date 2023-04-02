@@ -186,6 +186,8 @@
                                         <ColumnDefinition Width="40" />
                                         <ColumnDefinition Width="60" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="40" />
                                         <ColumnDefinition Width="120" />
                                         <ColumnDefinition Width="120" />
                                         <ColumnDefinition Width="120" />
@@ -208,34 +210,71 @@
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PlaySoundCommand}"
                                     Grid.Column="1"
                                     />
-                                    <Label
+                                    <Button
+                                        IsVisible="{Binding IsNotChangingName}"
                                         Text="{Binding FileName}"
+                                        HeightRequest="40"
+                                        BackgroundColor="#F2F4F4"
                                         FontSize="16"
                                         Grid.Column="2"
                                         VerticalOptions="Center"
-                                            ></Label>
-                                    <Label
-                                        Text="{Binding Length}"
+                                        HorizontalOptions="Start"
+                                        CommandParameter="{Binding .}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=StartChangeFDRNameCommand}"
+                                            >
+                                    </Button>
+                                    <Entry
+                                        Placeholder="{Binding FileName}"
+                                        TextColor="Black"
+                                        IsVisible="{Binding IsChangingName}"
+                                        Grid.Column="2"
+                                        x:Name="FDRNameChangeEntry"
+                                        ReturnCommandParameter="{Binding Source={x:Reference FDRNameChangeEntry}, Path=Text}"
+                                        ReturnCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=FDRNameChangedCommand}"
+                                        MaxLength="50"
+                                    />
+                                    <Button
+                                        IsVisible="{Binding IsChangingName}"
+                                        Text="Set"
+                                        HeightRequest="40"
                                         FontSize="16"
                                         Grid.Column="3"
                                         VerticalOptions="Center"
-                                            ></Label>
-                                    <Label
-                                        Text="{Binding Format}"
+                                        CommandParameter="{Binding Source={x:Reference FDRNameChangeEntry}, Path=Text}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=FDRNameChangedCommand}"
+                                            ></Button>
+                                    <Button
+                                        IsVisible="{Binding IsChangingName}"
+                                        Text="X"
+                                        Background="#DD6666"
+                                        HeightRequest="40"
                                         FontSize="16"
                                         Grid.Column="4"
                                         VerticalOptions="Center"
-                                            ></Label>
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CancelChangeFDRNameCommand}"
+                                            ></Button>
                                     <Label
-                                        Text="{Binding BitRate}"
+                                        Text="{Binding Length}"
                                         FontSize="16"
                                         Grid.Column="5"
                                         VerticalOptions="Center"
                                             ></Label>
                                     <Label
-                                        Text="{Binding Size}"
+                                        Text="{Binding Format}"
                                         FontSize="16"
                                         Grid.Column="6"
+                                        VerticalOptions="Center"
+                                            ></Label>
+                                    <Label
+                                        Text="{Binding BitRate}"
+                                        FontSize="16"
+                                        Grid.Column="7"
+                                        VerticalOptions="Center"
+                                            ></Label>
+                                    <Label
+                                        Text="{Binding Size}"
+                                        FontSize="16"
+                                        Grid.Column="8"
                                         VerticalOptions="Center"
                                             ></Label>
                                 </Grid>
@@ -394,7 +433,7 @@
                                     />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
-                            
+
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -426,12 +465,6 @@
                         />
                 </HorizontalStackLayout>
             </Grid>
-
-            <!--<Label
-                Text="Categories"
-                Background="Blue"
-                WidthRequest="600"
-                />-->
         </Grid>
     </ScrollView>
 
