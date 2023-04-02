@@ -304,10 +304,9 @@
                         <DataTemplate x:DataType="model:CategoryGroup">
                             <VerticalStackLayout>
                                 <Grid
-                                RowDefinitions="40, 40, 40"
-                                ColumnDefinitions="170, 170, 170, 170"
-                                HeightRequest="130"
-                                WidthRequest="692"
+                                RowDefinitions="50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50"
+                                ColumnDefinitions="175, 175, 175, 175"
+                                HeightRequest="{Binding HeightRequest}"
                                 Background="#ECF7F9"
                                 BindableLayout.ItemsSource="{Binding Categories}"
                                 >
@@ -318,7 +317,8 @@
                                             Grid.Row="{Binding RowNumber}"
                                             Grid.Column="{Binding ColumnNumber}"
                                             HeightRequest="40"
-                                            WidthRequest="170"
+                                            WidthRequest="175"
+                                            VerticalOptions="Center"
                                             FontSize="20"
                                             Text="{Binding Name}"
                                             CommandParameter="{Binding FilePath}"

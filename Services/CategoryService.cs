@@ -31,6 +31,22 @@ namespace Sample_Librarian.Services
                 category.RowNumber = Convert.ToInt32(Math.Floor(Convert.ToDecimal(i) / 4));
                 categoryGroup.Categories.Add(category);
             }
+            int rowsCount = 0;
+            categoryGroup.RowDefinitions = "42";
+            categoryGroup.HeightRequest = "50";
+            if (files.Length > 4) {
+                decimal rows = files.Length;
+                decimal RCCeiling = Math.Ceiling(rows / 4);
+                rowsCount = Convert.ToInt32(RCCeiling);
+                categoryGroup.HeightRequest = (rowsCount * 50).ToString();
+                if (rowsCount > 1)
+                {
+                    for (int i = 1; i < rowsCount; i++)
+                    {
+                        categoryGroup.RowDefinitions = categoryGroup.RowDefinitions + ", 42";
+                    }
+                }
+            }
             return categoryGroup;
         }
 

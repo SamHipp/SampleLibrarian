@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Sample_Librarian.Model
 {
-    public class CategoryGroup
+    public class CategoryGroup : ObservableValidator
     {
         public int Id { get; set; }
         public int Pk { get; set; }
@@ -17,6 +17,17 @@ namespace Sample_Librarian.Model
         public List<Category> Categories { get; set;}
         public bool IsAdding { get; set; }
         public string AddCategoryText { get; set; }
-        public int RowsHeight { get; set; }
+        private string rowDefinitions;
+        public string RowDefinitions
+        {
+            get => rowDefinitions;
+            set => SetProperty(ref rowDefinitions, value, true);
+        }
+        private string heightRequest;
+        public string HeightRequest
+        {
+            get => heightRequest;
+            set => SetProperty(ref heightRequest, value, true);
+        }
     }
 }

@@ -209,7 +209,6 @@ public partial class MainViewModel : BaseViewModel
         {
             if (parentFilePath == null || parentFilePath.Length == 0) { parentFilePath = CategoriesBaseFilePath; }
             CategoryGroup categoryGroup = CategoryService.GetCategoryGroup(parentFilePath);
-            categoryGroup.AddCategoryText = "+";
             for (int i = CategoryGroups.Count - 1; i >= 0; i--)
             {
                 if (CategoryGroups[i].Id >= categoryGroup.Id)
@@ -231,12 +230,7 @@ public partial class MainViewModel : BaseViewModel
                         }
                         if (CategoryGroups[i].Categories[j].FilePath == parentFilePath)
                         {
-                            CategoryGroup newCategoryGroup = CategoryGroups[i];
-                            CategoryGroups.Remove(CategoryGroups[i]);
-                            OnPropertyChanged(nameof(CategoryGroups));
-                            CategoryGroups.Insert(i, newCategoryGroup);
                             CategoryGroups[i].Categories[j].IsSelected = true;
-                            OnPropertyChanged(nameof(CategoryGroups));
                         }
                     }
                 }
