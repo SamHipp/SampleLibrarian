@@ -208,6 +208,7 @@ public partial class MainViewModel : BaseViewModel
                 OnPropertyChanged(nameof(IsFileDataRowsLoaded));
                 OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
                 OnPropertyChanged("FileDataRows");
+                OnPropertyChanged(nameof(SourceFolders));
                 OnPropertyChanged();
             });
         }
