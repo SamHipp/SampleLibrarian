@@ -17,12 +17,6 @@ namespace Sample_Librarian.Model
         public List<Category> Categories { get; set;}
         public bool IsAdding { get; set; }
         public string AddCategoryText { get; set; }
-        private string rowDefinitions;
-        public string RowDefinitions
-        {
-            get => rowDefinitions;
-            set => SetProperty(ref rowDefinitions, value, true);
-        }
         private string heightRequest;
         public string HeightRequest
         {

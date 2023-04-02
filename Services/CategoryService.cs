@@ -39,13 +39,6 @@ namespace Sample_Librarian.Services
                 decimal RCCeiling = Math.Ceiling(rows / 4);
                 rowsCount = Convert.ToInt32(RCCeiling);
                 categoryGroup.HeightRequest = (rowsCount * 50).ToString();
-                if (rowsCount > 1)
-                {
-                    for (int i = 1; i < rowsCount; i++)
-                    {
-                        categoryGroup.RowDefinitions = categoryGroup.RowDefinitions + ", 42";
-                    }
-                }
             }
             return categoryGroup;
         }
