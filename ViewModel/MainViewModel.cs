@@ -325,21 +325,23 @@ public partial class MainViewModel : BaseViewModel
             {
                 for (int i = 0; i < CategoryGroups.Count; i++)
                 {
-                    for (int j = 0; j < CategoryGroups[i].Categories.Count; j++)
+                    if (CategoryGroups[i].Id + 1 == categoryGroup.Id)
                     {
-                        if (CategoryGroups[i].Categories[j].IsSelected == true)
+                        for (int j = 0; j < CategoryGroups[i].Categories.Count; j++)
                         {
-                            CategoryGroups[i].Categories[j].IsSelected = false;
-                        }
-                        if (CategoryGroups[i].Categories[j].FilePath == parentFilePath)
-                        {
-                            CategoryGroups[i].Categories[j].IsSelected = true;
+                            if (CategoryGroups[i].Categories[j].IsSelected == true)
+                            {
+                                CategoryGroups[i].Categories[j].IsSelected = false;
+                            }
+                            if (CategoryGroups[i].Categories[j].FilePath == parentFilePath)
+                            {
+                                CategoryGroups[i].Categories[j].IsSelected = true;
+                            }
                         }
                     }
                 }
             }
             OnPropertyChanged("CategoryGroups");
-            OnPropertyChanged();
         }
         catch (Exception ex)
         {
