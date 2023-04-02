@@ -172,6 +172,16 @@ public partial class MainViewModel : BaseViewModel
                     }
                 }
                 CurrentSourceFolderPath = filePath;
+                if (FileDataRows.Count > 0)
+                {
+                    for (int i = 0; i < FileDataRows.Count; i++)
+                    {
+                        if (FileDataRows[i].HasPlayer == true)
+                        {
+                            FileDataRows[i].Player.Dispose();
+                        }
+                    }
+                }
                 FileDataRows.Clear();
                 OnPropertyChanged("FileDataRows");
                 List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
@@ -272,7 +282,6 @@ public partial class MainViewModel : BaseViewModel
                             if (FileDataRows[i].HasPlayer == true)
                             {
                                 FileDataRows[i].Player.Dispose();
-                                FileDataRows[i].Player = null;
                             }
                             string newFilePath = $"{CurrentSourceFolderPath}\\{inputText}{FileDataRows[i].Format}";
                             Directory.Move(FileDataRows[i].FilePath, newFilePath);
@@ -592,18 +601,20 @@ public partial class MainViewModel : BaseViewModel
         try
         {
             List<FileDataRow> files = new List<FileDataRow>();
-            for (int i = 0; i < FileDataRows.Count; i++)
+            await Task.Run(() =>
             {
-                if (FileDataRows[i].IsSelected)
+                for (int i = 0; i < FileDataRows.Count; i++)
                 {
-                    if (FileDataRows[i].HasPlayer == true)
+                    if (FileDataRows[i].IsSelected)
                     {
-                        FileDataRows[i].Player.Dispose();
-                        FileDataRows[i].Player = null;
+                        if (FileDataRows[i].HasPlayer == true)
+                        {
+                            FileDataRows[i].Player.Dispose();
+                        }
+                        files.Add(FileDataRows[i]);
                     }
-                    files.Add(FileDataRows[i]);
                 }
-            }
+            });
             await Task.Run(() =>
             {
                 files.ForEach((file) => File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}"));
@@ -633,7 +644,6 @@ public partial class MainViewModel : BaseViewModel
                         if (FileDataRows[i].HasPlayer == true)
                         {
                             FileDataRows[i].Player.Dispose();
-                            FileDataRows[i].Player = null;
                         }
                         files.Add(FileDataRows[i]);
                     }
