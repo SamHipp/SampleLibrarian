@@ -32,7 +32,6 @@ namespace Sample_Librarian.Services
                 categoryGroup.Categories.Add(category);
             }
             int rowsCount = 0;
-            categoryGroup.RowDefinitions = "42";
             categoryGroup.HeightRequest = "50";
             if (files.Length > 4) {
                 decimal rows = files.Length;
