@@ -19,10 +19,12 @@ public class SourceFolderService
             sourceFolder.FilePath = result.Folder.Path;
             sourceFolder.Name = result.Folder.Name;
             sourceFolder.IsSelected = true;
+            sourceFolder.Id = 1;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
+            sourceFolder.Id = 0;
         }
         return sourceFolder;
     }

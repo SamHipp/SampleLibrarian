@@ -93,6 +93,7 @@ public partial class MainViewModel : BaseViewModel
         try
         {
             SourceFolder sourceFolder = await sourceFolderService.GetSourceFolder(cancellationToken);
+            if (sourceFolder.Id == 0) { return; }
             if (SourceFolders.Count > 0)
             {
                 for (int i = 0; i < SourceFolders.Count; i++)
