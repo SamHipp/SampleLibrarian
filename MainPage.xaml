@@ -16,6 +16,7 @@
             </Grid.ColumnDefinitions>
             <Grid
                 Grid.Column="0"
+                BackgroundColor="white"
                 >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60" />
@@ -168,6 +169,7 @@
                                 ></Label>
                 </Grid>
                 <CollectionView
+                    IsVisible="{Binding IsFileDataRowsLoaded}"
                     ItemsSource="{Binding FileDataRows}"
                     Background="White"
                     Grid.Row="2"
@@ -280,10 +282,16 @@
                                             ></Label>
                                 </Grid>
                             </Border>
-                            
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                <Image
+                    IsVisible="{Binding IsFileDataRowsNotLoaded}"
+                    Grid.Row="2"
+                    HeightRequest="300"
+                    WidthRequest="300"
+                    x:Name="FDRLoadingEllipse"
+                    Source="loading_ellipse.png"></Image>
             </Grid>
             <Grid
                 Background="#ECF7F9"

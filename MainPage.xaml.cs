@@ -14,6 +14,8 @@ public partial class MainPage : ContentPage
 {
 	private MainViewModel viewModel;
 
+    readonly Animation rotation;
+
 	public MainPage(MainViewModel mainViewModel)
     {
         InitializeComponent();
@@ -23,6 +25,22 @@ public partial class MainPage : ContentPage
         {
             await viewModel.OnAppStartup();
         });
+        rotation = new Animation(v => FDRLoadingEllipse.Rotation = v, 0, 360, Easing.Linear);
+        viewModel.PropertyChanged += ViewModel_PropertyChanged;
+    }
+
+    private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(viewModel.IsFileDataRowsNotLoaded))
+        {
+            if (viewModel.IsFileDataRowsNotLoaded == true)
+            {
+                rotation.Commit(this, "rotate", 16, 1000, Easing.Linear, (v, c) => FDRLoadingEllipse.Rotation = 0, () => true);
+            } else
+            {
+                this.AbortAnimation("rotate");
+            }
+        }
     }
 
     public void OnSelectAllChanged(object sender, CheckedChangedEventArgs e)

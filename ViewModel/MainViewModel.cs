@@ -40,6 +40,10 @@ public partial class MainViewModel : BaseViewModel
 
     [ObservableProperty]
     bool allSelected = false;
+    [ObservableProperty]
+    public bool isFileDataRowsLoaded = true;
+    [ObservableProperty]
+    public bool isFileDataRowsNotLoaded = false;
 
     [ObservableProperty]
     public bool isSourceFolderPresent = false;
@@ -75,7 +79,7 @@ public partial class MainViewModel : BaseViewModel
             {
                 SourceFolders.Add(sourceFolder);
             }
-            GetFiles(sourceFolders[0].FilePath);
+            await GetFiles(sourceFolders[0].FilePath);
             if (CategoriesBaseFilePath.Length > 0) { GetCategoryGroup(CategoriesBaseFilePath); }
             await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
             await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
@@ -108,7 +112,7 @@ public partial class MainViewModel : BaseViewModel
             await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
             await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
                 
-            GetFiles(sourceFolder.FilePath);
+            await GetFiles(sourceFolder.FilePath);
         }
         catch (Exception ex)
         {
@@ -148,57 +152,69 @@ public partial class MainViewModel : BaseViewModel
 
 
     [RelayCommand]
-    public void GetFiles(string filePath)
+    public async Task GetFiles(string filePath)
     {
         try
         {
-            for (int i = 0; i < SourceFolders.Count; i++)
+            IsFileDataRowsLoaded = false;
+            IsFileDataRowsNotLoaded = true;
+            OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+            OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
+            await Task.Run(() =>
             {
-                SourceFolders[i].IsSelected = false;
-                if (SourceFolders[i].FilePath== filePath)
+                for (int i = 0; i < SourceFolders.Count; i++)
                 {
-                    SourceFolders[i].IsSelected = true;
+                    SourceFolders[i].IsSelected = false;
+                    if (SourceFolders[i].FilePath == filePath)
+                    {
+                        SourceFolders[i].IsSelected = true;
+                    }
                 }
-            }
-            CurrentSourceFolderPath = filePath;
-            FileDataRows.Clear();
-            OnPropertyChanged("FileDataRows");
-            List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
-            foreach (var dataRow in dataRows) {
-                if (dataRow.HasPlayer == true)
+                CurrentSourceFolderPath = filePath;
+                FileDataRows.Clear();
+                OnPropertyChanged("FileDataRows");
+                List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
+                foreach (var dataRow in dataRows)
                 {
-                    string seconds = "";
-                    string minutes = "";
-                    if (dataRow.Player.Duration >= 60)
+                    if (dataRow.HasPlayer == true)
                     {
-                        seconds = (Convert.ToInt32(dataRow.Player.Duration) % 60).ToString();
-                        minutes = Math.Floor((Convert.ToDecimal(dataRow.Player.Duration) / 60)).ToString();
+                        string seconds = "";
+                        string minutes = "";
+                        if (dataRow.Player.Duration >= 60)
+                        {
+                            seconds = (Convert.ToInt32(dataRow.Player.Duration) % 60).ToString();
+                            minutes = Math.Floor((Convert.ToDecimal(dataRow.Player.Duration) / 60)).ToString();
+                        }
+                        else { seconds = Math.Floor(Convert.ToDecimal(dataRow.Player.Duration)).ToString(); }
+                        if (seconds.Length == 1)
+                        {
+                            seconds = $"0{seconds}";
+                        }
+                        dataRow.Length = $"{minutes}:{seconds}";
+                        if (dataRow.Player != null && dataRow.Player.Duration > 0) { dataRow.BitRate = Math.Floor(((Convert.ToDecimal(dataRow.Size) / 1000 * 8) / (Convert.ToDecimal(dataRow.Player.Duration)))).ToString(); }
+                        decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
+                        if (DRSize > 1000)
+                        {
+                            dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
+                        }
+                        else { dataRow.Size = $"{DRSize} kB"; }
                     }
-                    else { seconds = Math.Floor(Convert.ToDecimal(dataRow.Player.Duration)).ToString(); }
-                    if (seconds.Length == 1)
-                    {
-                        seconds = $"0{seconds}";
-                    }
-                    dataRow.Length = $"{minutes}:{seconds}";
-                    if (dataRow.Player != null && dataRow.Player.Duration > 0) { dataRow.BitRate = Math.Floor(((Convert.ToDecimal(dataRow.Size) / 1000 * 8) / (Convert.ToDecimal(dataRow.Player.Duration)))).ToString(); }
-                    decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
-                    if (DRSize > 1000)
-                    {
-                        dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
-                    }
-                    else { dataRow.Size = $"{DRSize} kB"; }
-                }
-                
-                FileDataRows.Add(dataRow); 
-            };
-            AllSelected = false;
-            OnPropertyChanged("FileDataRows");
-            OnPropertyChanged();
+
+                    FileDataRows.Add(dataRow);
+                };
+                AllSelected = false;
+                IsFileDataRowsLoaded = true;
+                IsFileDataRowsNotLoaded = false;
+                OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+                OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
+                OnPropertyChanged("FileDataRows");
+                OnPropertyChanged();
+            });
         }
         catch (Exception ex)
         { 
             Debug.WriteLine( ex );
-            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
 
@@ -231,7 +247,7 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    public void FDRNameChanged(string inputText)
+    public async Task FDRNameChanged(string inputText)
     {
         try
         {
@@ -258,17 +274,17 @@ public partial class MainViewModel : BaseViewModel
                             }
                             string newFilePath = $"{CurrentSourceFolderPath}\\{inputText}{FileDataRows[i].Format}";
                             Directory.Move(FileDataRows[i].FilePath, newFilePath);
-                            GetFiles(CurrentSourceFolderPath);
+                            await GetFiles(CurrentSourceFolderPath);
                         }
                         else
                         {
-                            Shell.Current.DisplayAlert("Error!", $"The {inputText} file already exists!", "OK");
+                            await Shell.Current.DisplayAlert("Error!", $"The {inputText} file already exists!", "OK");
                         }
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex);
-                        Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+                        await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
                     }
 
                 }
@@ -280,7 +296,7 @@ public partial class MainViewModel : BaseViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Error!", $"{ex.Message}", "OK");
         }
     }
 
@@ -361,7 +377,7 @@ public partial class MainViewModel : BaseViewModel
                 CategoriesBaseFilePath = fileDirectory.Path;
                 OnPropertyChanged(nameof(CategoriesBaseFilePath));
 
-                GetFiles(SourceFolders[0].FilePath);
+                await GetFiles(SourceFolders[0].FilePath);
             }
             else
             {
@@ -583,9 +599,8 @@ public partial class MainViewModel : BaseViewModel
             await Task.Run(() =>
             {
                 files.ForEach((file) => File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}"));
-                GetFiles(CurrentSourceFolderPath);
             });
-            
+            await GetFiles(CurrentSourceFolderPath);
         }
         catch(Exception ex)
         {
@@ -611,7 +626,7 @@ public partial class MainViewModel : BaseViewModel
                     }
                 }
                 files.ForEach((file) => File.Delete(file.FilePath));
-                GetFiles(CurrentSourceFolderPath);
+                await GetFiles(CurrentSourceFolderPath);
             }
             else { return; }
         }
