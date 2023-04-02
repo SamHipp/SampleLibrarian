@@ -596,6 +596,11 @@ public partial class MainViewModel : BaseViewModel
             {
                 if (FileDataRows[i].IsSelected)
                 {
+                    if (FileDataRows[i].HasPlayer == true)
+                    {
+                        FileDataRows[i].Player.Dispose();
+                        FileDataRows[i].Player = null;
+                    }
                     files.Add(FileDataRows[i]);
                 }
             }
@@ -625,6 +630,11 @@ public partial class MainViewModel : BaseViewModel
                 {
                     if (FileDataRows[i].IsSelected)
                     {
+                        if (FileDataRows[i].HasPlayer == true)
+                        {
+                            FileDataRows[i].Player.Dispose();
+                            FileDataRows[i].Player = null;
+                        }
                         files.Add(FileDataRows[i]);
                     }
                 }
