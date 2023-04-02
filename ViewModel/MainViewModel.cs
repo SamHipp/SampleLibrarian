@@ -374,6 +374,7 @@ public partial class MainViewModel : BaseViewModel
         try
         {
             FileDirectory fileDirectory = await categoryService.SetBaseFilePath(cancellationToken);
+            if (fileDirectory.Name == "") { return; }
             fileDirectory.Pk = await DBService.AddFileDirectory(fileDirectory.Name, fileDirectory.Path, "Category");
             if (fileDirectory.Pk != 0) {
                 CategoriesBaseFilePath = fileDirectory.Path;

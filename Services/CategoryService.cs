@@ -91,6 +91,7 @@ namespace Sample_Librarian.Services
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+                directory.Name = "";
             }
             return directory;
         }
