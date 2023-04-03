@@ -79,7 +79,6 @@
                         Grid.Column="1"
                         />
                     <Button
-                        IsVisible="{Binding IsSourceFoldersNotFull}"
                         HeightRequest="40"
                         WidthRequest="60"
                         Text="+"

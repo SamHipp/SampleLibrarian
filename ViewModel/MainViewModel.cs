@@ -49,9 +49,6 @@ public partial class MainViewModel : BaseViewModel
     public bool isSourceFolderPresent = false;
 
     [ObservableProperty]
-    public bool isSourceFoldersNotFull = true;
-
-    [ObservableProperty]
     public string currentSourceFolderPath = "";
 
     [ObservableProperty]
@@ -101,17 +98,14 @@ public partial class MainViewModel : BaseViewModel
                     SourceFolders[i].IsSelected = false;
                 }
             }
-            if (SourceFolders.Count > 3)
-            {
-                IsSourceFoldersNotFull = false;
-            };
             sourceFolder.Pk = await DBService.AddFileDirectory(sourceFolder.Name, sourceFolder.FilePath, "SourceFolder");
+            sourceFolder.IsSelected = true;
             SourceFolders.Add(sourceFolder);
             CurrentSourceFolderPath = sourceFolder.FilePath;
             IsSourceFolderPresent = true;
-            await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
-            await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
-            await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
+            OnPropertyChanged(nameof(SourceFolders));
+            OnPropertyChanged(nameof(CurrentSourceFolderPath));
+            OnPropertyChanged(nameof(IsSourceFolderPresent));
                 
             await GetFiles(sourceFolder.FilePath);
         }
@@ -210,15 +204,18 @@ public partial class MainViewModel : BaseViewModel
                         }
                         else { dataRow.Size = $"{DRSize} kB"; }
                     }
-
                     FileDataRows.Add(dataRow);
+                    if (dataRow.HasPlayer == true)
+                    {
+                        dataRow.Player.Dispose();
+                    }
                 };
                 AllSelected = false;
                 IsFileDataRowsLoaded = true;
                 IsFileDataRowsNotLoaded = false;
                 OnPropertyChanged(nameof(IsFileDataRowsLoaded));
                 OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
-                OnPropertyChanged("FileDataRows");
+                OnPropertyChanged(nameof(FileDataRows));
                 OnPropertyChanged(nameof(SourceFolders));
                 OnPropertyChanged();
             });
@@ -617,7 +614,13 @@ public partial class MainViewModel : BaseViewModel
             });
             await Task.Run(() =>
             {
-                files.ForEach((file) => File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}"));
+                files.ForEach((file) => {
+                    if (file.HasPlayer == true)
+                    {
+                        file.Player.Dispose();
+                    }
+                    File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}");
+                });
             });
             await GetFiles(CurrentSourceFolderPath);
         }
@@ -648,7 +651,14 @@ public partial class MainViewModel : BaseViewModel
                         files.Add(FileDataRows[i]);
                     }
                 }
-                files.ForEach((file) => File.Delete(file.FilePath));
+                files.ForEach((file) =>
+                {
+                    if (file.HasPlayer == true)
+                    {
+                        file.Player.Dispose();
+                    }
+                    File.Delete(file.FilePath);
+                });
                 await GetFiles(CurrentSourceFolderPath);
             }
             else { return; }
