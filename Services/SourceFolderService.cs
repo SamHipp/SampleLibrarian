@@ -14,7 +14,7 @@ public class SourceFolderService
     {
         try
         {
-            var result = await FolderPicker.Default.PickAsync(cancellationToken);
+            FolderPickerResult result = await FolderPicker.Default.PickAsync(cancellationToken);
             result.EnsureSuccess();
             sourceFolder.FilePath = result.Folder.Path;
             sourceFolder.Name = result.Folder.Name;

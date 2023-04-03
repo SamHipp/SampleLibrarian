@@ -65,10 +65,15 @@ public partial class MainViewModel : BaseViewModel
 
     public async Task OnAppStartup()
     {
+        IsFileDataRowsLoaded = false;
+        IsFileDataRowsNotLoaded = true;
+        OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+        OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
         List<SourceFolder> sourceFolders = await DBService.GetSourceFolderFileDirectories();
         FileDirectory categoriesBaseFPFD = await DBService.GetCategoryFileDirectory();
         if (categoriesBaseFPFD != null) { CategoriesBaseFilePath = categoriesBaseFPFD.Path; }
-        if (sourceFolders == null || sourceFolders.Count > 0) {
+        if (sourceFolders == null || sourceFolders.Count > 0)
+        {
             CurrentSourceFolderPath = sourceFolders[0].FilePath;
             sourceFolders[0].IsSelected = true;
             IsSourceFolderPresent = true;
@@ -78,19 +83,35 @@ public partial class MainViewModel : BaseViewModel
             }
             await GetFiles(sourceFolders[0].FilePath);
             if (CategoriesBaseFilePath.Length > 0) { GetCategoryGroup(CategoriesBaseFilePath); }
-            await Task.Run(() => { OnPropertyChanged(nameof(SourceFolders)); });
-            await Task.Run(() => { OnPropertyChanged(nameof(CurrentSourceFolderPath)); });
-            await Task.Run(() => { OnPropertyChanged(nameof(IsSourceFolderPresent)); });
-        } else { return; }
+            IsFileDataRowsLoaded = true;
+            IsFileDataRowsNotLoaded = false;
+            OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+            OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
+            OnPropertyChanged(nameof(SourceFolders));
+            OnPropertyChanged(nameof(CurrentSourceFolderPath));
+            OnPropertyChanged(nameof(IsSourceFolderPresent));
+        }
+        else 
+        {
+            IsFileDataRowsLoaded = true;
+            IsFileDataRowsNotLoaded = false;
+            OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+            OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
+            return; 
+        }
     }
 
     [RelayCommand]
-    public async Task AddSourceFolder(CancellationToken cancellationToken)
+    public async Task AddSourceFolder()
     {
         try
         {
-            SourceFolder sourceFolder = await sourceFolderService.GetSourceFolder(cancellationToken);
-            if (sourceFolder.Id == 0) { return; }
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+            IsFileDataRowsLoaded = false;
+            IsFileDataRowsNotLoaded = true;
+            OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+            OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
             if (SourceFolders.Count > 0)
             {
                 for (int i = 0; i < SourceFolders.Count; i++)
@@ -98,16 +119,29 @@ public partial class MainViewModel : BaseViewModel
                     SourceFolders[i].IsSelected = false;
                 }
             }
+            SourceFolder sourceFolder = await sourceFolderService.GetSourceFolder(cancellationToken);
+            if (sourceFolder.Id == 0) { return; }
             sourceFolder.Pk = await DBService.AddFileDirectory(sourceFolder.Name, sourceFolder.FilePath, "SourceFolder");
-            sourceFolder.IsSelected = true;
-            SourceFolders.Add(sourceFolder);
-            CurrentSourceFolderPath = sourceFolder.FilePath;
-            IsSourceFolderPresent = true;
-            OnPropertyChanged(nameof(SourceFolders));
-            OnPropertyChanged(nameof(CurrentSourceFolderPath));
-            OnPropertyChanged(nameof(IsSourceFolderPresent));
-                
-            await GetFiles(sourceFolder.FilePath);
+            cancellationTokenSource.Dispose();
+            if (sourceFolder.Pk > 0)
+            {
+                sourceFolder.IsSelected = true;
+                SourceFolders.Add(sourceFolder);
+                CurrentSourceFolderPath = sourceFolder.FilePath;
+                IsSourceFolderPresent = true;
+                OnPropertyChanged(nameof(SourceFolders));
+                OnPropertyChanged(nameof(CurrentSourceFolderPath));
+                OnPropertyChanged(nameof(IsSourceFolderPresent));
+
+                await GetFiles(sourceFolder.FilePath);
+            }
+            else { 
+                await Shell.Current.DisplayAlert("Error!", "There was a problem with adding the Source Folder to the Database.", "OK");
+                IsFileDataRowsLoaded = true;
+                IsFileDataRowsNotLoaded = false;
+                OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+                OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
+            }
         }
         catch (Exception ex)
         {
@@ -160,10 +194,6 @@ public partial class MainViewModel : BaseViewModel
                 for (int i = 0; i < SourceFolders.Count; i++)
                 {
                     SourceFolders[i].IsSelected = false;
-                    if (SourceFolders[i].FilePath == filePath)
-                    {
-                        SourceFolders[i].IsSelected = true;
-                    }
                 }
                 CurrentSourceFolderPath = filePath;
                 if (FileDataRows.Count > 0)
@@ -206,6 +236,13 @@ public partial class MainViewModel : BaseViewModel
                     }
                     FileDataRows.Add(dataRow);
                 };
+                for (int j = 0; j < SourceFolders.Count; j++)
+                {
+                    if (SourceFolders[j].FilePath == CurrentSourceFolderPath)
+                    {
+                        SourceFolders[j].IsSelected = true;
+                    }
+                }
                 AllSelected = false;
                 IsFileDataRowsLoaded = true;
                 IsFileDataRowsNotLoaded = false;
