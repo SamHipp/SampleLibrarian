@@ -471,7 +471,7 @@ public partial class MainViewModel : BaseViewModel
                             CategoryGroups.Remove(CategoryGroups[i]);
                             OnPropertyChanged("CategoryGroups");
                             if (categoryGroup != null) { CategoryGroups.Insert(i, categoryGroup); }
-                            OnPropertyChanged("CategoryGroups");
+                            GetCategoryGroup(CategoryGroups[i].FilePath);
                         }
                         else
                         {
@@ -486,8 +486,6 @@ public partial class MainViewModel : BaseViewModel
                         
                 }
             }
-            OnPropertyChanged("CategoryGroups");
-            OnPropertyChanged();
                 
         }
         catch (Exception ex)
