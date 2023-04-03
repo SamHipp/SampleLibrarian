@@ -210,15 +210,15 @@ public partial class MainViewModel : BaseViewModel
                         dataRow.Player.Dispose();
                     }
                 };
-                AllSelected = false;
-                IsFileDataRowsLoaded = true;
-                IsFileDataRowsNotLoaded = false;
-                OnPropertyChanged(nameof(IsFileDataRowsLoaded));
-                OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
-                OnPropertyChanged(nameof(FileDataRows));
-                OnPropertyChanged(nameof(SourceFolders));
-                OnPropertyChanged();
             });
+            AllSelected = false;
+            IsFileDataRowsLoaded = true;
+            IsFileDataRowsNotLoaded = false;
+            OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+            OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
+            OnPropertyChanged(nameof(FileDataRows));
+            OnPropertyChanged(nameof(SourceFolders));
+            OnPropertyChanged();
         }
         catch (Exception ex)
         { 
