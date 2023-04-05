@@ -315,8 +315,29 @@ public partial class MainViewModel : BaseViewModel
                                 FileDataRows[i].Player.Dispose();
                             }
                             string newFilePath = $"{CurrentSourceFolderPath}\\{inputText}{FileDataRows[i].Format}";
-                            Directory.Move(FileDataRows[i].FilePath, newFilePath);
-                            await GetFiles(CurrentSourceFolderPath);
+                            await Task.Run(() => Directory.Move(FileDataRows[i].FilePath, newFilePath));
+                            FileDataRow newDataRow = new();
+                            FileDataRows[i].Player.Dispose();
+                            newDataRow.FileName = inputText;
+                            newDataRow.FilePath = newFilePath;
+                            newDataRow.Id = i;
+                            newDataRow.Format = FileDataRows[i].Format;
+                            newDataRow.Length = FileDataRows[i].Length;
+                            newDataRow.BitRate = FileDataRows[i].BitRate;
+                            newDataRow.Size = FileDataRows[i].Size;
+                            newDataRow.IsChangingName = false;
+                            newDataRow.IsNotChangingName = true;
+                            if (FileDataRows[i].HasPlayer == true)
+                            {
+                                Stream stream = new FileStream(newDataRow.FilePath, FileMode.Open, FileAccess.Read);
+                                newDataRow.Player = AudioManager.Current.CreatePlayer(stream);
+                                newDataRow.HasPlayer = true;
+                                newDataRow.PlayerIcon = "play_icon.png";
+                            }
+                            FileDataRows.Remove(FileDataRows[i]);
+                            OnPropertyChanged(nameof(FileDataRows));
+                            FileDataRows.Insert(i, newDataRow);
+                            break;
                         }
                         else
                         {
