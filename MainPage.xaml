@@ -315,7 +315,7 @@
                     x:Name="CategoriesHeader"
                     Background="#ECF7F9"
                     Padding="20, 0"
-                    Spacing="170"
+                    Spacing="0"
                     Grid.Row="0"
                     >
                     <Label
@@ -328,8 +328,7 @@
                                         VerticalOptions="Center"
                         ></Label>
                     <HorizontalStackLayout
-                        WidthRequest="350"
-                        FlexLayout.Basis="350"
+                        WidthRequest="520"
                         Margin="0, 0, 20, 0"
                         >
                         <Button
@@ -346,8 +345,16 @@
                         Text="..."
                         ToolTipProperties.Text="Choose the location for your category folders"
                         Command="{Binding SetCategoriesBaseFilePathCommand}"
-                        Margin="0, 0, 20, 0"
+                        Margin="0"
                         Padding="10, 0"
+                        />
+                        <Button
+                        HeightRequest="40"
+                        WidthRequest="170"
+                        Text="Help/About"
+                        ToolTipProperties.Text="Learn how to use the app here"
+                        Command="{Binding NavigateToSettingsCommand}"
+                        Margin="20, 0"
                         />
                     </HorizontalStackLayout>
 

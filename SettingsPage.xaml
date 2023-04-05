@@ -5,17 +5,169 @@
              xmlns:viewmodel="clr-namespace:Sample_Librarian.ViewModel"
              x:DataType="viewmodel:SettingsViewModel"
              x:Class="Sample_Librarian.SettingsPage"
-             Title="Settings">
-    <VerticalStackLayout
-        Background="White">
-        <Label 
-            Text="Settings Page coming soon!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Button
+             Title="Settings"
+             Shell.NavBarIsVisible="false">
+    <Grid
+        Background="#F2F4F4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="500"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <VerticalStackLayout
+            HeightRequest="700"
+            Background="#F2F4F4"
+            Grid.Row="1">
+            <Label 
+                Text="The Sample Librarian -- Beta (0.117)"
+                FontSize="36"
+                FontAttributes="Bold"
+                TextColor="Black"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+            <Label 
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="Black"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Margin="0, 20, 0, 0"
+                TextType="Html" >
+                <Label.Text>
+                    <![CDATA[
+                    Thank you so much for testing the beta! Here are the basics for using the app.<br /><br />
+                    This app has 2 main sections: <strong>Source Folders</strong> (left), and <strong>Categories</strong> (right):
+                    ]]>
+                </Label.Text>
+            </Label>
+            <Grid
+                BackgroundColor="White"
+                HorizontalOptions="Center"
+                Margin="0, 20, 0, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="700"></ColumnDefinition>
+                    <ColumnDefinition Width="700"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ScrollView
+                    Grid.Column="0"
+                    HeightRequest="350">
+                    <VerticalStackLayout
+                        Padding="16">
+                        <Label 
+                        Text="Source Folders"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center" />
+                        <Label 
+                        FontSize="16"
+                        TextColor="Black"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
+                            LineHeight="1.5"
+                        TextType="Html">
+                            <Label.Text>
+                                <![CDATA[
+                                These are the folders that you can move your sample files from, i.e. your Splice downloads folder, a sample pack folder, etc. They will be saved when you close the app.<br />
+                                <strong>To add a source folder</strong>, click on the <strong>+</strong> button at the top next to the "volume" icon, then select the folder you'd like to add.<br />
+                                You can <strong>Remove a source folder</strong> by clicking the <strong>-</strong> button after selecting it as well.<br /><br />
+                                <strong>WARNING:</strong> Please be aware that the more files that are in a folder, the longer it will take to load, so it is not recommended to add large folders with many sub-folders inside them. The folder will eventually load, but your PC may hate you for it.
+                                ]]>
+                            </Label.Text>
+                        </Label>
+                        <Label 
+                        Text="Source Files"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
+                            Margin="0, 10"/>
+                        <Label 
+                            FontSize="16"
+                            TextColor="Black"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center"
+                            LineHeight="1.5"
+                            TextType="Html">
+                            <Label.Text>
+                                <![CDATA[
+                                Each file that appears under the Source Folders has a few things you can do with it:
+                                <ul>
+                                <li><strong>Select</strong> the file to move to a category with the checkbox. You can also select/deselect all files by clicking on the checkbox in the header row.</li>
+                                <li><strong>Play/pause</strong> the file (if it is a .wav or .mp3) with the circular "play" button. The volume can be set at the top of the screen.</li>
+                                <li><strong>Re-name</strong> the file by clicking on the file name itself.</li>
+                                <li>To <strong>delete a file</strong>, check its checkbox, and then click the <strong>DELETE</strong> button on the bottom right of the app.</li>
+                                </ul>
+                                ]]>
+                            </Label.Text>
+                        </Label>
+                    </VerticalStackLayout>
+                </ScrollView>
+                <ScrollView
+                    Grid.Column="1"
+                    HeightRequest="350">
+
+                    <VerticalStackLayout
+                    Grid.Column="1"
+                        Padding="16">
+                        <Label 
+                        Text="Categories"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center" />
+                        <Label 
+                        FontSize="16"
+                        TextColor="Black"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
+                            LineHeight="1.5"
+                        TextType="Html">
+                            <Label.Text>
+                                <![CDATA[
+                                <strong>To set the directory for your library</strong>, click on the <strong>...</strong> button on the top right, then select the folder you'd like to build your library in. If you already have a sample library, this app can "import" that as well by selecting that library's root folder.<br />
+                                <strong>To add a category</strong> in a particular group, click the <strong>+</strong> button directly below the group. Then, enter the new name for the category in the field and press enter or "Add".<br />
+                                <strong>To delete a category</strong> and all of its files, click on that category and then click on the <strong>-</strong> button.<br /><br />
+                                <strong>WARNING:</strong> deleting a category also deletes all the files and folders in it! Only delete a category if you are sure that you won't need its contents any more.<br /><br />
+                                To <strong>move files into a category</strong>, check the checkbox for each file you'd like to move, then click on the category you'd like to move them to before hitting <strong>CONFIRM</strong>.<br />
+                                To <strong>clear the category list</strong>, click on the <strong>Clear</strong> button on the top right of the app.
+                                ]]>
+                            </Label.Text>
+                        </Label>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Grid>
+            <Label 
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="Black"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Margin="0, 20" >
+                <Label.Text>
+                    That's about it so far! Please let me know if you run into any bugs/frustrations, or would like to see any other features added to the app. Thanks for trying the beta, I hope it's useful for you!
+                </Label.Text>
+            </Label>
+            <Button
             Text="Go Back"
             HeightRequest="60"
             WidthRequest="170"
             Command="{Binding NavigateBackCommand}" />
-    </VerticalStackLayout>
+            <Label 
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="Black"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Margin="0, 20, 0, 0" >
+                <Label.Text>
+                    Copyright 2023 Sam Hipp
+                </Label.Text>
+            </Label>
+
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>
