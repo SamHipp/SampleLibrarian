@@ -112,21 +112,22 @@ public partial class MainViewModel : BaseViewModel
             IsFileDataRowsNotLoaded = true;
             OnPropertyChanged(nameof(IsFileDataRowsLoaded));
             OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
-            if (SourceFolders.Count > 0)
-            {
-                for (int i = 0; i < SourceFolders.Count; i++)
-                {
-                    SourceFolders[i].IsSelected = false;
-                }
-            }
             SourceFolder sourceFolder = await sourceFolderService.GetSourceFolder(cancellationToken);
             if (sourceFolder.Id == 0) { return; }
             sourceFolder.Pk = await DBService.AddFileDirectory(sourceFolder.Name, sourceFolder.FilePath, "SourceFolder");
             cancellationTokenSource.Dispose();
             if (sourceFolder.Pk > 0)
             {
-                sourceFolder.IsSelected = true;
-                SourceFolders.Add(sourceFolder);
+                SourceFolders.Clear();
+                List<SourceFolder> sourceFolders = await DBService.GetSourceFolderFileDirectories();
+                for (int i = 0; i < sourceFolders.Count; i++)
+                {
+                    if (sourceFolders[i].FilePath == sourceFolder.FilePath)
+                    {
+                        sourceFolders[i].IsSelected = true;
+                    }
+                    SourceFolders.Add(sourceFolders[i]);
+                }
                 CurrentSourceFolderPath = sourceFolder.FilePath;
                 IsSourceFolderPresent = true;
                 OnPropertyChanged(nameof(SourceFolders));
