@@ -219,36 +219,6 @@ public partial class MainViewModel : BaseViewModel
                     FileDataRows.Add(dataRow);
                 };
             });
-            //for (int i = 0; i < FileDataRows.Count; i++)
-            //{
-            //    if (FileDataRows[i].HasPlayer == true)
-            //    {
-            //        Stream stream = new FileStream(FileDataRows[i].FilePath, FileMode.Open, FileAccess.Read);
-            //        using (await Task.Run(() => FileDataRows[i].Player = AudioManager.Current.CreatePlayer(stream)))
-            //        {
-            //            string seconds = "";
-            //            string minutes = "";
-            //            if (FileDataRows[i].Player.Duration >= 60)
-            //            {
-            //                seconds = (Convert.ToInt32(FileDataRows[i].Player.Duration) % 60).ToString();
-            //                minutes = Math.Floor((Convert.ToDecimal(FileDataRows[i].Player.Duration) / 60)).ToString();
-            //            }
-            //            else { seconds = Math.Floor(Convert.ToDecimal(FileDataRows[i].Player.Duration)).ToString(); }
-            //            if (seconds.Length == 1)
-            //            {
-            //                seconds = $"0{seconds}";
-            //            }
-            //            FileDataRows[i].Length = $"{minutes}:{seconds}";
-            //            if (FileDataRows[i].Player != null && FileDataRows[i].Player.Duration > 0) { FileDataRows[i].BitRate = Math.Floor(((Convert.ToDecimal(FileDataRows[i].Size) / 1000 * 8) / (Convert.ToDecimal(FileDataRows[i].Player.Duration)))).ToString(); }
-            //        }
-            //        decimal DRSize = Math.Floor(Convert.ToDecimal(FileDataRows[i].Size) / 1000);
-            //        if (DRSize > 1000)
-            //        {
-            //            FileDataRows[i].Size = $"{Math.Round(DRSize / 1000, 2)} MB";
-            //        }
-            //        else { FileDataRows[i].Size = $"{DRSize} kB"; }
-            //    }
-            //}
             await Task.Run(() =>
             {
                 for (int j = 0; j < SourceFolders.Count; j++)
@@ -336,8 +306,6 @@ public partial class MainViewModel : BaseViewModel
                             newDataRow.FilePath = newFilePath;
                             newDataRow.Id = i;
                             newDataRow.Format = FileDataRows[i].Format;
-                            newDataRow.Length = FileDataRows[i].Length;
-                            newDataRow.BitRate = FileDataRows[i].BitRate;
                             newDataRow.Size = FileDataRows[i].Size;
                             newDataRow.IsChangingName = false;
                             newDataRow.IsNotChangingName = true;

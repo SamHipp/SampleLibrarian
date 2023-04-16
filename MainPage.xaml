@@ -121,8 +121,6 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="120" />
                         <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="120" />
                     </Grid.ColumnDefinitions>
                     <CheckBox
                         x:Name="FileTableHeaderCheckBox"
@@ -139,32 +137,18 @@
                             Grid.Column="2"
                                 ></Label>
                     <Label
-                            Text="Length"
+                            Text="Format"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
                             Grid.Column="3"
                                 ></Label>
                     <Label
-                            Text="Format"
-                            SemanticProperties.HeadingLevel="Level3"
-                            FontSize="16"
-                            FontAttributes="Bold"
-                            Grid.Column="4"
-                                ></Label>
-                    <Label
-                            Text="Bit-Rate"
-                            SemanticProperties.HeadingLevel="Level3"
-                            FontSize="16"
-                            FontAttributes="Bold"
-                            Grid.Column="5"
-                                ></Label>
-                    <Label
                             Text="Size"
                             SemanticProperties.HeadingLevel="Level3"
                             FontSize="16"
                             FontAttributes="Bold"
-                            Grid.Column="6"
+                            Grid.Column="4"
                                 ></Label>
                 </Grid>
                 <CollectionView
@@ -190,8 +174,6 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="60" />
                                         <ColumnDefinition Width="40" />
-                                        <ColumnDefinition Width="120" />
-                                        <ColumnDefinition Width="120" />
                                         <ColumnDefinition Width="120" />
                                         <ColumnDefinition Width="120" />
                                     </Grid.ColumnDefinitions>
@@ -266,27 +248,15 @@
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CancelChangeFDRNameCommand}"
                                             ></Button>
                                     <Label
-                                        Text="{Binding Length}"
+                                        Text="{Binding Format}"
                                         FontSize="16"
                                         Grid.Column="5"
                                         VerticalOptions="Center"
                                             ></Label>
                                     <Label
-                                        Text="{Binding Format}"
-                                        FontSize="16"
-                                        Grid.Column="6"
-                                        VerticalOptions="Center"
-                                            ></Label>
-                                    <Label
-                                        Text="{Binding BitRate}"
-                                        FontSize="16"
-                                        Grid.Column="7"
-                                        VerticalOptions="Center"
-                                            ></Label>
-                                    <Label
                                         Text="{Binding Size}"
                                         FontSize="16"
-                                        Grid.Column="8"
+                                        Grid.Column="6"
                                         VerticalOptions="Center"
                                             ></Label>
                                 </Grid>
