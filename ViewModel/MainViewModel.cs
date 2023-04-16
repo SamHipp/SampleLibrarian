@@ -17,6 +17,7 @@ using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Maui.Core.Primitives;
 using System.Threading;
+using System.Data;
 
 namespace Sample_Librarian.ViewModel;
 public partial class MainViewModel : BaseViewModel
@@ -215,31 +216,41 @@ public partial class MainViewModel : BaseViewModel
                 List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
                 foreach (var dataRow in dataRows)
                 {
-                    if (dataRow.HasPlayer == true)
-                    {
-                        //string seconds = "";
-                        //string minutes = "";
-                        //if (dataRow.Player.Duration >= 60)
-                        //{
-                        //    seconds = (Convert.ToInt32(dataRow.Player.Duration) % 60).ToString();
-                        //    minutes = Math.Floor((Convert.ToDecimal(dataRow.Player.Duration) / 60)).ToString();
-                        //}
-                        //else { seconds = Math.Floor(Convert.ToDecimal(dataRow.Player.Duration)).ToString(); }
-                        //if (seconds.Length == 1)
-                        //{
-                        //    seconds = $"0{seconds}";
-                        //}
-                        //dataRow.Length = $"{minutes}:{seconds}";
-                        //if (dataRow.Player != null && dataRow.Player.Duration > 0) { dataRow.BitRate = Math.Floor(((Convert.ToDecimal(dataRow.Size) / 1000 * 8) / (Convert.ToDecimal(dataRow.Player.Duration)))).ToString(); }
-                    }
-                    decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
-                    if (DRSize > 1000)
-                    {
-                        dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
-                    }
-                    else { dataRow.Size = $"{DRSize} kB"; }
                     FileDataRows.Add(dataRow);
                 };
+            });
+            //for (int i = 0; i < FileDataRows.Count; i++)
+            //{
+            //    if (FileDataRows[i].HasPlayer == true)
+            //    {
+            //        Stream stream = new FileStream(FileDataRows[i].FilePath, FileMode.Open, FileAccess.Read);
+            //        using (await Task.Run(() => FileDataRows[i].Player = AudioManager.Current.CreatePlayer(stream)))
+            //        {
+            //            string seconds = "";
+            //            string minutes = "";
+            //            if (FileDataRows[i].Player.Duration >= 60)
+            //            {
+            //                seconds = (Convert.ToInt32(FileDataRows[i].Player.Duration) % 60).ToString();
+            //                minutes = Math.Floor((Convert.ToDecimal(FileDataRows[i].Player.Duration) / 60)).ToString();
+            //            }
+            //            else { seconds = Math.Floor(Convert.ToDecimal(FileDataRows[i].Player.Duration)).ToString(); }
+            //            if (seconds.Length == 1)
+            //            {
+            //                seconds = $"0{seconds}";
+            //            }
+            //            FileDataRows[i].Length = $"{minutes}:{seconds}";
+            //            if (FileDataRows[i].Player != null && FileDataRows[i].Player.Duration > 0) { FileDataRows[i].BitRate = Math.Floor(((Convert.ToDecimal(FileDataRows[i].Size) / 1000 * 8) / (Convert.ToDecimal(FileDataRows[i].Player.Duration)))).ToString(); }
+            //        }
+            //        decimal DRSize = Math.Floor(Convert.ToDecimal(FileDataRows[i].Size) / 1000);
+            //        if (DRSize > 1000)
+            //        {
+            //            FileDataRows[i].Size = $"{Math.Round(DRSize / 1000, 2)} MB";
+            //        }
+            //        else { FileDataRows[i].Size = $"{DRSize} kB"; }
+            //    }
+            //}
+            await Task.Run(() =>
+            {
                 for (int j = 0; j < SourceFolders.Count; j++)
                 {
                     if (SourceFolders[j].FilePath == CurrentSourceFolderPath)
@@ -740,6 +751,7 @@ public partial class MainViewModel : BaseViewModel
             }
             else
             {
+                
                 if (fileDataRow.Player == null)
                 {
                     Stream stream = new FileStream(fileDataRow.FilePath, FileMode.Open, FileAccess.Read);
