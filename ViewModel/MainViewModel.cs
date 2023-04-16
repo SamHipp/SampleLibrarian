@@ -216,6 +216,12 @@ public partial class MainViewModel : BaseViewModel
                 List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
                 foreach (var dataRow in dataRows)
                 {
+                    decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
+                    if (DRSize > 1000)
+                    {
+                        dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
+                    }
+                    else { dataRow.Size = $"{DRSize} kB"; }
                     FileDataRows.Add(dataRow);
                 };
             });
