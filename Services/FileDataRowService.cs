@@ -30,8 +30,6 @@ namespace Sample_Librarian.Services;
                 fileDataRow.IsNotChangingName = true;
                 if (fileDataRow.Format == ".wav" || fileDataRow.Format == ".mp3")
                 {
-                    Stream stream = new FileStream(fileDataRow.FilePath, FileMode.Open, FileAccess.Read);
-                    fileDataRow.Player = AudioManager.Current.CreatePlayer(stream);
                     fileDataRow.HasPlayer = true;
                     fileDataRow.PlayerIcon = "play_icon.png";
                 }

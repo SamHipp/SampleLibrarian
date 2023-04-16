@@ -201,12 +201,15 @@ public partial class MainViewModel : BaseViewModel
                 {
                     for (int i = 0; i < FileDataRows.Count; i++)
                     {
-                        if (FileDataRows[i].HasPlayer == true)
+                        if (FileDataRows[i].HasPlayer == true && FileDataRows[i].Player != null)
                         {
                             FileDataRows[i].Player.Dispose();
                         }
                     }
                 }
+            });
+            await Task.Run(() =>
+            {
                 FileDataRows.Clear();
                 OnPropertyChanged("FileDataRows");
                 List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
@@ -214,27 +217,27 @@ public partial class MainViewModel : BaseViewModel
                 {
                     if (dataRow.HasPlayer == true)
                     {
-                        string seconds = "";
-                        string minutes = "";
-                        if (dataRow.Player.Duration >= 60)
-                        {
-                            seconds = (Convert.ToInt32(dataRow.Player.Duration) % 60).ToString();
-                            minutes = Math.Floor((Convert.ToDecimal(dataRow.Player.Duration) / 60)).ToString();
-                        }
-                        else { seconds = Math.Floor(Convert.ToDecimal(dataRow.Player.Duration)).ToString(); }
-                        if (seconds.Length == 1)
-                        {
-                            seconds = $"0{seconds}";
-                        }
-                        dataRow.Length = $"{minutes}:{seconds}";
-                        if (dataRow.Player != null && dataRow.Player.Duration > 0) { dataRow.BitRate = Math.Floor(((Convert.ToDecimal(dataRow.Size) / 1000 * 8) / (Convert.ToDecimal(dataRow.Player.Duration)))).ToString(); }
-                        decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
-                        if (DRSize > 1000)
-                        {
-                            dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
-                        }
-                        else { dataRow.Size = $"{DRSize} kB"; }
+                        //string seconds = "";
+                        //string minutes = "";
+                        //if (dataRow.Player.Duration >= 60)
+                        //{
+                        //    seconds = (Convert.ToInt32(dataRow.Player.Duration) % 60).ToString();
+                        //    minutes = Math.Floor((Convert.ToDecimal(dataRow.Player.Duration) / 60)).ToString();
+                        //}
+                        //else { seconds = Math.Floor(Convert.ToDecimal(dataRow.Player.Duration)).ToString(); }
+                        //if (seconds.Length == 1)
+                        //{
+                        //    seconds = $"0{seconds}";
+                        //}
+                        //dataRow.Length = $"{minutes}:{seconds}";
+                        //if (dataRow.Player != null && dataRow.Player.Duration > 0) { dataRow.BitRate = Math.Floor(((Convert.ToDecimal(dataRow.Size) / 1000 * 8) / (Convert.ToDecimal(dataRow.Player.Duration)))).ToString(); }
                     }
+                    decimal DRSize = Math.Floor(Convert.ToDecimal(dataRow.Size) / 1000);
+                    if (DRSize > 1000)
+                    {
+                        dataRow.Size = $"{Math.Round(DRSize / 1000, 2)} MB";
+                    }
+                    else { dataRow.Size = $"{DRSize} kB"; }
                     FileDataRows.Add(dataRow);
                 };
                 for (int j = 0; j < SourceFolders.Count; j++)
@@ -730,13 +733,18 @@ public partial class MainViewModel : BaseViewModel
         if (fileDataRow == null) { return; }
         try
         {
-            if (fileDataRow.Player.IsPlaying)
+            if (fileDataRow.Player != null && fileDataRow.Player.IsPlaying)
             {
                 fileDataRow.Player.Stop();
                 fileDataRow.PlayerIcon = "play_icon.png";
             }
             else
             {
+                if (fileDataRow.Player == null)
+                {
+                    Stream stream = new FileStream(fileDataRow.FilePath, FileMode.Open, FileAccess.Read);
+                    fileDataRow.Player = AudioManager.Current.CreatePlayer(stream);
+                }
                 fileDataRow.Player.Volume = (VolumeLevel / 100);
                 fileDataRow.PlayerIcon = "pause_icon.png";
                 fileDataRow.Player.Play();
