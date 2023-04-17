@@ -211,10 +211,10 @@ public partial class MainViewModel : BaseViewModel
                     }
                 }
             }
+            FileDataRows.Clear();
+            OnPropertyChanged("FileDataRows");
             await Task.Run(() =>
             {
-                FileDataRows.Clear();
-                OnPropertyChanged("FileDataRows");
                 List<FileDataRow> dataRows = fileDataRowService.GetFileDataRows(filePath);
                 foreach (var dataRow in dataRows)
                 {
@@ -236,15 +236,15 @@ public partial class MainViewModel : BaseViewModel
                         SourceFolders[j].IsSelected = true;
                     }
                 }
-                AllSelected = false;
-                IsFileDataRowsLoaded = true;
-                IsFileDataRowsNotLoaded = false;
-                OnPropertyChanged(nameof(IsFileDataRowsLoaded));
-                OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
-                OnPropertyChanged(nameof(FileDataRows));
-                OnPropertyChanged(nameof(SourceFolders));
-                OnPropertyChanged();
             });
+            AllSelected = false;
+            IsFileDataRowsLoaded = true;
+            IsFileDataRowsNotLoaded = false;
+            OnPropertyChanged(nameof(IsFileDataRowsLoaded));
+            OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
+            OnPropertyChanged(nameof(FileDataRows));
+            OnPropertyChanged(nameof(SourceFolders));
+            OnPropertyChanged();
         }
         catch (Exception ex)
         { 
@@ -644,7 +644,7 @@ public partial class MainViewModel : BaseViewModel
             {
                 if (FileDataRows[i].IsSelected)
                 {
-                    if (FileDataRows[i].HasPlayer == true)
+                    if (FileDataRows[i].HasPlayer == true && FileDataRows[i].Player != null)
                     {
                         FileDataRows[i].Player.Stop();
                         await Task.Run(() =>
@@ -667,7 +667,9 @@ public partial class MainViewModel : BaseViewModel
                     file.Player = null;
                 }
                 Thread.Sleep(300);
-                File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}");
+                await Task.Run(() => {
+                    File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}");
+                });
             });
             await GetFiles(CurrentSourceFolderPath);
         }

@@ -16,7 +16,7 @@ namespace Sample_Librarian.Services;
             
             if (dataRows.Count > 0) { dataRows.Clear(); };
             string[] files = Directory.GetFiles(filePath, "*", SearchOption.AllDirectories);
-            for (int i = 0; i < files.Length; i++)
+            for (int i = 0; i < files.Length || i < 200; i++)
             {
 
                 var fileDataRow = new FileDataRow();
