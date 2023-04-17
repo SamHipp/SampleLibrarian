@@ -191,24 +191,26 @@ public partial class MainViewModel : BaseViewModel
             IsFileDataRowsNotLoaded = true;
             OnPropertyChanged(nameof(IsFileDataRowsLoaded));
             OnPropertyChanged(nameof(IsFileDataRowsNotLoaded));
-            await Task.Run(() =>
+            for (int i = 0; i < SourceFolders.Count; i++)
             {
-                for (int i = 0; i < SourceFolders.Count; i++)
+                SourceFolders[i].IsSelected = false;
+            }
+            CurrentSourceFolderPath = filePath;
+            if (FileDataRows.Count > 0)
+            {
+                for (int i = 0; i < FileDataRows.Count; i++)
                 {
-                    SourceFolders[i].IsSelected = false;
-                }
-                CurrentSourceFolderPath = filePath;
-                if (FileDataRows.Count > 0)
-                {
-                    for (int i = 0; i < FileDataRows.Count; i++)
+                    if (FileDataRows[i].HasPlayer == true && FileDataRows[i].Player != null)
                     {
-                        if (FileDataRows[i].HasPlayer == true && FileDataRows[i].Player != null)
+                        FileDataRows[i].Player.Stop();
+                        await Task.Run(() =>
                         {
                             FileDataRows[i].Player.Dispose();
-                        }
+                        });
+                        FileDataRows[i].Player = null;
                     }
                 }
-            });
+            }
             await Task.Run(() =>
             {
                 FileDataRows.Clear();
@@ -300,14 +302,15 @@ public partial class MainViewModel : BaseViewModel
                         }
                         if (!alreadyExists)
                         {
-                            if (FileDataRows[i].HasPlayer == true)
+                            if (FileDataRows[i].HasPlayer == true && FileDataRows[i].Player != null)
                             {
-                                FileDataRows[i].Player.Dispose();
+                                FileDataRows[i].Player.Stop();
+                                await Task.Run(() => {  FileDataRows[i].Player.Dispose(); });
+                                FileDataRows[i].Player = null;
                             }
                             string newFilePath = $"{CurrentSourceFolderPath}\\{inputText}{FileDataRows[i].Format}";
                             await Task.Run(() => Directory.Move(FileDataRows[i].FilePath, newFilePath));
                             FileDataRow newDataRow = new();
-                            FileDataRows[i].Player.Dispose();
                             newDataRow.FileName = inputText;
                             newDataRow.FilePath = newFilePath;
                             newDataRow.Id = i;
@@ -317,8 +320,6 @@ public partial class MainViewModel : BaseViewModel
                             newDataRow.IsNotChangingName = true;
                             if (FileDataRows[i].HasPlayer == true)
                             {
-                                Stream stream = new FileStream(newDataRow.FilePath, FileMode.Open, FileAccess.Read);
-                                newDataRow.Player = AudioManager.Current.CreatePlayer(stream);
                                 newDataRow.HasPlayer = true;
                                 newDataRow.PlayerIcon = "play_icon.png";
                             }
@@ -639,29 +640,34 @@ public partial class MainViewModel : BaseViewModel
         try
         {
             List<FileDataRow> files = new List<FileDataRow>();
-            await Task.Run(() =>
+            for (int i = 0; i < FileDataRows.Count; i++)
             {
-                for (int i = 0; i < FileDataRows.Count; i++)
+                if (FileDataRows[i].IsSelected)
                 {
-                    if (FileDataRows[i].IsSelected)
+                    if (FileDataRows[i].HasPlayer == true)
                     {
-                        if (FileDataRows[i].HasPlayer == true)
+                        FileDataRows[i].Player.Stop();
+                        await Task.Run(() =>
                         {
                             FileDataRows[i].Player.Dispose();
-                        }
-                        files.Add(FileDataRows[i]);
+                        });
+                        FileDataRows[i].Player = null;
                     }
+                    files.Add(FileDataRows[i]);
                 }
-            });
-            await Task.Run(() =>
-            {
-                files.ForEach((file) => {
-                    if (file.HasPlayer == true)
+            }
+            files.ForEach(async (file) => {
+                if (file.HasPlayer == true && file.Player != null)
+                {
+                    file.Player.Stop();
+                    await Task.Run(() =>
                     {
                         file.Player.Dispose();
-                    }
-                    File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}");
-                });
+                    });
+                    file.Player = null;
+                }
+                Thread.Sleep(300);
+                File.Move(file.FilePath, $"{ActiveCategoryFilePath}\\{file.FileName}{file.Format}");
             });
             await GetFiles(CurrentSourceFolderPath);
         }
@@ -685,19 +691,24 @@ public partial class MainViewModel : BaseViewModel
                 {
                     if (FileDataRows[i].IsSelected)
                     {
-                        if (FileDataRows[i].HasPlayer == true)
+                        if (FileDataRows[i].HasPlayer == true && FileDataRows[i].Player != null)
                         {
-                            FileDataRows[i].Player.Dispose();
+                            FileDataRows[i].Player.Stop();
+                            await Task.Run(() => { FileDataRows[i].Player.Dispose(); });
+                            FileDataRows[i].Player = null;
                         }
                         files.Add(FileDataRows[i]);
                     }
                 }
-                files.ForEach((file) =>
+                files.ForEach(async (file) =>
                 {
-                    if (file.HasPlayer == true)
+                    if (file.HasPlayer == true && file.Player != null)
                     {
-                        file.Player.Dispose();
+                        file.Player.Stop();
+                        await Task.Run(() => { file.Player.Dispose(); });
+                        file.Player = null;
                     }
+                    Thread.Sleep(300);
                     File.Delete(file.FilePath);
                 });
                 await GetFiles(CurrentSourceFolderPath);
